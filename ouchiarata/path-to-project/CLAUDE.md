@@ -1,123 +1,117 @@
-The keywords "MUST", "NEVER", "SHOULD", and "MAY" in this document are to be interpreted as described in RFC 2119.
+本ドキュメントにおけるキーワード「MUST」「NEVER」「SHOULD」「MAY」は、RFC 2119 に規定された意味で解釈すること。
 
-# Code Rules
-1. MUST follow these naming and formatting conventions: `snake_case` for variables, `camelCase` for functions, `PascalCase` for types, `CONSTANT_CASE` for env vars, 4-space indent, no unnecessary semicolons, prefer double quotes
-2. MUST use descriptive names even if verbose (NG: `const handle = () => {}`)
-3. IF backward compatibility is deemed necessary -> MUST confirm with the user before proceeding
-4. NEVER use fallback values in constants (NG: `web_url: process.env.WEB_URL || 'http://localhost:3000'`)
-5. NEVER use fallback values in functions; MUST return an error on failure
-6. MUST define all error messages in a single file
-7. MUST define all log messages in a single file
-8. MUST define all types in files within a dedicated directory
-9. SHOULD objectify variable names to normalize them into single words (e.g., `worksName` -> `works.name`)
-10. MUST use a modular monolith architecture
-11. NEVER use prefixes such as `NUXT_` or `NUXT_PUBLIC_` and `VITE_` for environment variable names
-12. NEVER write or format inline code within directives as multi-line (it causes errors and won't work)
+# 一時指示
+1. MUST: 本ファイルを `AGENTS.md` にリネームし、`CLAUDE.md` を `AGENTS.md` へのシンボリックリンクとして再作成する
+2. IF: 上記完了; THEN MUST: 本セクション（L3-L5）を削除してコミットする
 
-## Packages
-1. MUST install packages via `npm install`; NEVER write directly into `package.json`
-2. IF using Nuxt -> MUST use `latest` version
-3. IF using Firebase -> MUST use `firebase-admin`; NEVER use client packages
-4. IF processing dates -> MUST use `date-fns`
-5. IF implementing AI-related features -> SHOULD prefer Vercel AI SDK
-6. IF implementing `Slack`, `Discord`, `Microsoft Teams`, `GitHub`, `Telegram`, `Linear` integrations -> MUST use Vercel Labs Chat SDK
-7. IF using `unkey` -> MUST use the v2 SDK
+# コードルール
+1. MUST: 以下の命名・フォーマット規約に従う: 変数は `snake_case`、関数は `camelCase`、型は `PascalCase`、環境変数は `CONSTANT_CASE`、インデントは4スペース、不要なセミコロンは使用しない、クォートはダブルクォートを優先する
+2. MUST: 冗長になっても説明的な名前を使用する（NG: `const handle = () => {}`）
+3. IF: 後方互換性が必要と判断される; THEN MUST: 進める前にユーザーに確認する
+4. NEVER: 定数にフォールバック値を使用しない（NG: `web_url: process.env.WEB_URL || 'http://localhost:3000'`）
+5. NEVER: 関数内でフォールバック値を使用しない; MUST: 失敗時はエラーを返す
+6. MUST: ログ実装・ログメッセージは `packages/log` に集約する; NEVER: 他パッケージで独自にロガーを生成しない
+7. MUST: エラー定義・エラーメッセージ・共通エラーハンドリングは `packages/error` に集約する; NEVER: 他パッケージで `Error` を直接 `throw` しない
+8. MUST: AI プロンプト（システムプロンプト、テンプレート等）は `packages/prompt` に集約する; NEVER: 他パッケージにプロンプト文字列を直書きしない
+9. MUST: 環境変数の zod スキーマと型付き `env` の参照は `packages/env` に集約する; NEVER: `packages/env` 以外で `process.env` を直接参照しない
+10. MUST: データベース接続・クエリ・スキーマ定義は `packages/db` に集約する; NEVER: 他パッケージから DB クライアントを直接生成しない
+11. MUST: すべての型を専用ディレクトリ内のファイルで定義する
+12. SHOULD: 変数名をオブジェクト化して単一ワードに正規化する（例: `worksName` → `works.name`）
+13. MUST: モジュラーモノリスアーキテクチャを採用する
+14. NEVER: 環境変数名に `NUXT_`、`NUXT_PUBLIC_`、`VITE_` などのプレフィックスを使用しない
+15. NEVER: ディレクティブ内のインラインコードを複数行で記述・フォーマットしない（エラーが発生し、動作しない）
+
+## パッケージ
+1. MUST: `pnpm add` を使ってパッケージをインストールする; NEVER: `package.json` に直接書き込まない
+2. IF: Nuxt を使用; THEN MUST: `latest` バージョンを使用する
+3. IF: Firebase を使用; THEN MUST: `firebase-admin` を使用する; NEVER: クライアントパッケージを使用しない
+4. IF: 日付処理; THEN MUST: `date-fns` を使用する
+5. IF: AI関連機能を実装; THEN SHOULD: Vercel AI SDK を優先する
+6. IF: `Slack`、`Discord`、`Microsoft Teams`、`GitHub`、`Telegram`、`Linear` の連携を実装; THEN MUST: Vercel Labs Chat SDK を使用する
+7. IF: `unkey` を使用; THEN MUST: v2 SDK を使用する
 
 ## Google Analytics
-1. MUST ask about cookie usage and send a consent signal upon agreement
-2. `analytics_storage` MUST always be `granted` (basic analytics are always enabled)
-3. `ad_storage`, `ad_user_data`, `ad_personalization` SHOULD be `granted` by default
-4. IF user selects "Do not consent" -> MUST update advertising-related values to `denied`
+1. MUST: Cookie の使用について確認し、同意を得た際に同意シグナルを送信する
+2. `analytics_storage` は MUST: 常に `granted` にする（基本的な分析は常に有効）
+3. `ad_storage`、`ad_user_data`、`ad_personalization` は SHOULD: デフォルトで `granted` にする
+4. IF: ユーザーが「同意しない」を選択; THEN MUST: 広告関連の値を `denied` に更新する
 
-## Environment Variables
-1. MUST use `dotenvx` for `.env` file encryption and injection; startup command MUST be `dotenvx run -- <command>`
-2. MUST define all environment variables in a single `env.ts` using `zod` schema (`envSchema`)
-3. MUST validate with `envSchema.safeParse(process.env)` at startup; IF validation fails -> MUST log field errors and `process.exit(1)`
-4. MUST export a typed `env` object and `Env` type (`z.infer<typeof envSchema>`) from `env.ts`
-5. NEVER reference `process.env` directly outside `env.ts`; all other files MUST use `import { env } from "@/env"`
-6. Default values MUST only be defined via `.default()` within the zod schema in `env.ts`; NEVER use `||` or `??` fallbacks elsewhere
-7. `.env.example` is unnecessary; the zod schema in `env.ts` serves as the single source of truth for variable names, types, defaults, and validation rules
+## API 設計
+1. MUST: OpenAPI に準拠する
+2. MUST: エラーレスポンスの構造を RFC 9457 に準拠させる
+3. MUST: URL パスバージョニングを使用する（例: `/api/v1/`）
+4. SHOULD: パスはできる限り短くする; IF: やむを得ない場合; THEN MUST: `kebab-case` を使用する
+5. MUST: 単数形の名詞を使用する（`/users` ではなく `/user`）
+6. MUST: Bearer 認証を使用する
+7. MUST: ヘルスチェックエンドポイントの構造を [draft-inadarei-api-health-check](https://datatracker.ietf.org/doc/html/draft-inadarei-api-health-check) に準拠させる
+8. MUST: [Spectral](https://github.com/stoplightio/spectral) を使用して API をリントする
+9. SHOULD: HTTP フレームワークとして [Hono](https://hono.dev/) を使用する; IF: MCP サーバーを構築; THEN MUST: `@hono/mcp` と組み合わせた Hono を使用する
 
-## API Design
-1. MUST conform to OpenAPI
-2. Error response structure MUST conform to RFC 9457
-3. MUST use URL path versioning (e.g., `/api/v1/`)
-4. SHOULD adopt paths as short as possible; IF unavoidable -> MUST use `kebab-case`
-5. MUST use singular nouns (`/user` instead of `/users`)
-6. MUST use Bearer authentication
-7. Health check endpoint structure MUST conform to [draft-inadarei-api-health-check](https://datatracker.ietf.org/doc/html/draft-inadarei-api-health-check)
-8. MUST lint the API using [Spectral](https://github.com/stoplightio/spectral)
-9. SHOULD use [Hono](https://hono.dev/) as the HTTP framework; IF building an MCP server -> MUST use Hono with `@hono/mcp`
+# 運用ルール
+1. MUST: すべてのデータモデルを `llm/models.yaml` に記録する; IF: 実装が変更された; THEN MUST: このファイルを更新する
+2. IF: 環境変数が変更された; THEN MUST: `packages/env/.env.<scope>` (dotenvx 暗号化済み) を更新する
+3. IF: 一括検索・置換が望ましい; THEN SHOULD: `temp/` 内に `.js` スクリプトを作成し、実行後に削除する
+4. MUST: Biome と ESLint Vue を導入し、適切なタイミングでフォーマットコマンドを実行する
+5. NEVER: `.vue` ファイルに `biome check --fix --unsafe` を実行しない（Biome は Vue テンプレートスコープを解析できないため、`_` プレフィックスの付与などの誤検知が発生する）
+6. MUST: 常に日本語で回答する
+7. IF: サービスのバージョン変更が必要と判断された; THEN MUST: セマンティックバージョニングに基づいて `VERSION` を更新し、`llm/version/${version}.md` を作成する
+8. IF: アーキテクチャが変更された; THEN MUST: `./llm/ARCHITECTURE.md` の Mermaid ダイアグラムを更新する
 
-# Operational Rules
-1. MUST record all data models in `llm/models.yaml`; IF implementation changes -> MUST update this file
-2. IF bulk find-and-replace is preferable -> SHOULD write a `.js` script inside `temp/`, execute it, then delete the script
-4. MUST introduce Biome & ESLint Vue and run format commands as appropriate
-5. NEVER run `biome check --fix --unsafe` on `.vue` files (Biome cannot analyze Vue template scope, causing false positives like `_` prefix renaming)
-6. MUST always respond in Japanese
-7. IF a service version change is deemed necessary -> MUST update `VERSION` based on Semantic Versioning and create `llm/version/${version}.md`
-8. IF architecture changes -> MUST update the Mermaid diagram in `./llm/ARCHITECTURE.md`
+## コミットメッセージ
+1. MUST: `type: 説明（日本語、短い文）` のフォーマットを使用する
+2. IF: モノレポ; THEN MUST: `type(scope): 説明（日本語、短い文）` のフォーマットを使用し、説明を短く保つためにカッコ表記は用いない。
+3. MUST: 論理的なスコープ（パッケージ、機能）ごとにコミットを分割する; NEVER: 無関係な変更をまとめてコミットしない
+4. 変更をコミットする際:
+   - ファイルごとに `git diff` を実行して各変更の作者を確認する。
+   - NEVER: committer を上書きしない（常にユーザーの git config を使用する）
+   - IF: すべての変更がエージェントによって生成された（ユーザー編集行がない）; THEN MUST: `--author` のみで自身のエージェント種別を明示する:
+      - OpenAI (Codex): `git commit --author="Codex <noreply@openai.com>" -m "<message>"`
+      - Anthropic (Claude): `git commit --author="Claude <noreply@anthropic.com>" -m "<message>"`
+   - IF: 一部でもユーザーによる変更がある; THEN MUST: 通常の `git commit` を使用する。
+5. NEVER: `Co-Authored-By` を追加しない
+6. NEVER: `git add .` や `git add -A` を使用しない
+7. NEVER: 無関係な変更を1つのコミットに混在させない
 
-## Commit Messages
-1. MUST use the format `type: description (in Japanese, short sentence)`
-2. For monorepos: MUST use the format `type(scope): description (in Japanese, short sentence)`
-3. MUST split commits by logical scope (package, feature); NEVER bulk-commit unrelated changes together
-4. MUST analyze `git diff` per file to determine author:
-   - Only Claude-generated changes -> MUST set author and committer to Claude (`GIT_COMMITTER_NAME="Claude" GIT_COMMITTER_EMAIL="noreply@anthropic.com" git commit --author="Claude <noreply@anthropic.com>"`)
-   - Contains user-edited changes -> MUST NOT override author or committer
-   - When uncertain -> SHOULD ask the user
-5. NEVER add `Co-Authored-By`
-6. NEVER use `git add .` or `git add -A`
-7. NEVER mix unrelated changes in a single commit
+### コミットメッセージのプレフィクス
+`feat`=新機能, `fix`=バグ修正, `perf`=性能改善, `refactor`=機能変更なしの改善, `docs`=ドキュメント, `style`=スタイル修正, `test`=テスト, `chore`=その他, `ci`=CI/CD設定, `build`=ビルド設定
 
-| Prefix | Usage |
-|---|---|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `perf` | Performance improvement |
-| `refactor` | Code improvement without functional changes |
-| `docs` | Documentation changes |
-| `style` | Code style fixes |
-| `test` | Adding or modifying tests |
-| `chore` | Miscellaneous tasks |
-| `ci` | CI/CD configuration changes |
-| `build` | Build configuration changes |
+## Git 操作
+1. MUST: あらゆる Git 操作（コミット、プッシュ、ブランチ作成、マージ、リベース）の前に `git fetch --prune` を実行する
+2. MUST: 現在のブランチがデフォルトブランチにマージ済みか確認する; IF: マージ済み; THEN: ユーザーに警告してブランチの切り替えを提案する
+3. MUST: リモートトラッキングブランチがまだ存在するか確認する; IF: 削除されている; THEN: ユーザーに警告する
+4. MUST: ローカルブランチがリモートより遅れていないか確認する; IF: 遅れている; THEN: `git pull --rebase` を提案する
+5. IF: ローカルブランチがリモートと乖離している; THEN SHOULD: ユーザーに警告し、リベースまたはマージを提案する
+6. NEVER: ユーザーの確認なしにブランチを切り替えない
+7. NEVER: ユーザーの承認なしに `git pull` や `git rebase` を実行しない
+8. NEVER: ユーザーの確認なしにローカルブランチを削除しない
 
-## Git Operations
-1. MUST run `git fetch --prune` before any git operation (commit, push, branch creation, merge, rebase)
-2. MUST check if current branch has been merged into default branch; IF merged -> warn user and suggest switching
-3. MUST check if remote tracking branch still exists; IF deleted -> warn user
-4. MUST check if local branch is behind remote; IF behind -> suggest `git pull --rebase`
-5. IF local branch diverged from remote -> SHOULD warn user, suggest rebase or merge
-6. NEVER silently switch branches without user confirmation
-7. NEVER run `git pull` or `git rebase` without user approval
-8. NEVER delete local branches without user confirmation
+## テスト責務
+1. MUST: 新しいユーザー向け機能の実装後、重要な UI 変更後、またはユーザーフロー変更後に E2E テストを作成・実行する
+2. MUST: E2E テストのメインツールとして agent-browser を使用する; agent-browser では対応できないインタラクション（キャンバス操作、細かいマウス操作、タッチジェスチャー、ネットワーク傍受、複数ページ/クロスオリジンフロー、WebSocket/SSE アサーション）に限り Playwright にフォールバックする
+3. IF: Playwright にフォールバックする; THEN MUST: agent-browser では対応できなかった理由をテストファイルに記載する
+4. MUST NOT: 純粋なバックエンド/API の変更、ドキュメントのみの変更、設定/依存関係の更新、動作変更を伴わないリファクタリングに対してはトリガーしない
+5. NEVER: 新しいユーザー向け機能のテスト作成をスキップしない
+6. NEVER: agent-browser で対応できるインタラクションに Playwright を使用しない
+7. NEVER: タイミングに依存するテスト（`sleep`）を作成しない — MUST: 明示的な待機条件を使用する
 
-## Test Responsibility
-1. MUST create and run E2E tests after implementing a new user-facing feature, significant UI change, or user flow modification
-2. MUST use agent-browser as the primary E2E testing tool; fall back to Playwright only for interactions agent-browser cannot handle (canvas manipulation, fine-grained mouse sequences, touch gestures, network interception, multi-page/cross-origin flows, WebSocket/SSE assertions)
-3. IF falling back to Playwright -> MUST note in the test file why agent-browser was insufficient
-4. MUST NOT trigger for: pure backend/API changes, documentation-only changes, config/dependency updates, refactors with no behavioral change
-5. NEVER skip writing tests for a new user-facing feature
-6. NEVER use Playwright when agent-browser can handle the interaction
-7. NEVER write tests that depend on timing (`sleep`) — MUST use explicit wait conditions
+## TypeScript モノレポ
+1. MUST: Turborepo + pnpm ワークスペースのベストプラクティスに従う
+2. MUST: パッケージマネージャーは pnpm に統一する; ロックファイルは `pnpm-lock.yaml` のみコミットする
+3. MUST: ワークスペース構成を `pnpm-workspace.yaml` で定義する
+4. MUST: `apps/`（デプロイ可能なアプリケーション）と `packages/`（共有ライブラリ・設定）の分離を維持する
+5. NEVER: デプロイ可能なアプリを `packages/` に配置しない; NEVER: 共有ライブラリを `apps/` に配置しない
+6. MUST: `@<org>/` プレフィックスを持つスコープ付きパッケージ名を使用する; すべての内部パッケージは MUST: `"private": true` を設定する
+7. MUST: 各パッケージの `package.json` に `exports` を定義する; `main` より `exports` を優先する
+8. MUST: `packages/tsconfig/` に共有 TypeScript 設定を作成する; 各パッケージは MUST: それを継承する
+9. MUST: 共通責務を担う以下のパッケージを `packages/` 配下に必ず配置する: `log`（ログ集約）、`error`（エラー集約）、`prompt`（AI プロンプト集約）、`env`（環境変数集約）、`db`（データベース集約）
+10. MUST: 上記責務パッケージを利用する側は `@<org>/log`・`@<org>/error`・`@<org>/prompt`・`@<org>/env`・`@<org>/db` を `workspace:*` で依存に追加する; NEVER: 該当責務を呼び出し側で再実装しない
+11. MUST: 依存関係を考慮したタスクパイプラインを持つ `turbo.json` を作成する
+12. MUST: 内部依存関係には `workspace:*` プロトコルを使用する
+13. SHOULD: デフォルトは JIT（Just-in-Time）コンパイルパターンを採用する; IF: コンパイル済み（`tsc` → `dist/`）への切り替えを明示的に要求された; THEN: 切り替える
+14. NEVER: ネストしたパッケージを作成しない; NEVER: Turborepo をグローバルにインストールしない — `pnpm exec turbo` またはルートの devDependency を使用する
 
-## TypeScript Monorepo
-1. MUST follow Turborepo + workspace (pnpm / npm) best practices
-2. MUST detect package manager from lock file (`pnpm-lock.yaml` -> pnpm, `package-lock.json` -> npm); use consistently
-3. MUST follow `apps/` (deployable applications) + `packages/` (shared libraries & config) separation
-4. NEVER place deployable apps in `packages/`; NEVER place shared libraries in `apps/`
-5. MUST use scoped package names with `@<org>/` prefix; all internal packages MUST have `"private": true`
-6. MUST define `exports` in each package's `package.json`; prefer `exports` over `main`
-7. MUST create shared TypeScript config in `packages/typescript-config/`; each package MUST extend it
-8. MUST create `turbo.json` with dependency-aware task pipeline
-9. MUST use workspace protocol for internal dependencies (`workspace:*` for pnpm, `*` for npm)
-10. Default to JIT (Just-in-Time) compilation pattern; switch to compiled (`tsc` -> `dist/`) only when explicitly requested
-11. NEVER create nested packages; NEVER install Turborepo globally — use `npx turbo` or root devDependency
-
-## Migration Procedure
-1. MUST create an API to retrieve the number of data records subject to migration
-2. MUST create an API to perform the migration and execute a Dry Run
-3. IF pre-fetched data count == Dry Run changed count -> proceed to step 4
-   ELSE -> MUST fix and re-run
-4. MUST execute the migration, then delete the API
+## マイグレーション手順
+1. MUST: マイグレーション対象のデータレコード数を取得する API を作成する
+2. MUST: マイグレーションを実行してドライランを行う API を作成する
+3. IF: 事前取得データ数 == ドライランの変更数; THEN: ステップ4へ進む; ELSE MUST: 修正して再実行する
+4. MUST: マイグレーションを実行し、その後 API を削除する

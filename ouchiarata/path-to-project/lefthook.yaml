@@ -1,3 +1,29 @@
+pre-commit:
+  commands:
+    dotenv-encrypted-check:
+      glob: "**/.env*"
+      run: |
+        export LANG=ja_JP.UTF-8
+        export LC_ALL=ja_JP.UTF-8
+
+        EXPECTED='#/-------------------[DOTENV_PUBLIC_KEY]--------------------/'
+        FAILED=0
+        for file in {staged_files}; do
+          if [ ! -f "$file" ]; then
+            continue
+          fi
+          FIRST_LINE=$(head -n 1 "$file")
+          case "$FIRST_LINE" in
+            "$EXPECTED"*) ;;
+            *)
+              echo "$file の1行目が暗号化ヘッダで始まっていません。暗号化されていない環境変数が混入している可能性があります。dotenvx encrypt で暗号化してください"
+              FAILED=1
+              ;;
+          esac
+        done
+
+        exit $FAILED
+
 commit-msg:
   commands:
     semantic-commit-lint:
@@ -24,8 +50,9 @@ commit-msg:
           exit 1
         fi
 
-        if echo "$COMMIT_MSG" | grep -qE '[()（）\[\]]'; then
-          echo "かっこ類は使用できません。補足情報はコミットメッセージから省いてください [$COMMIT_MSG]"
+        COMMIT_BODY=$(echo "$COMMIT_MSG" | sed -E "s/^($VALID_PREFIXES)(\([^)]+\))?: //")
+        if echo "$COMMIT_BODY" | grep -qE '[()（）\[\]]'; then
+          echo "本文にかっこ類は使用できません（スコープ表記 type(scope): は許可） [$COMMIT_MSG]"
           exit 1
         fi
 
