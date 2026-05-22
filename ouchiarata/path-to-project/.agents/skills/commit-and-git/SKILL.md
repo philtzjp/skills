@@ -1,6 +1,6 @@
 ---
 name: commit-and-git
-description: コミット、プッシュ、ブランチ作成/切り替え/削除、マージ、リベースなどあらゆる Git 操作を行うときに参照する。コミットメッセージのフォーマット (`type(scope): 説明`)、`--author` の扱い、`git fetch --prune` などの安全チェック、`Co-Authored-By` 禁止、`git add .` 禁止などを定義する。
+description: "コミット、プッシュ、ブランチ作成/切り替え/削除、マージ、リベースなどあらゆる Git 操作を行うときに参照する。コミットメッセージのフォーマット (`type(scope): 説明`)、`--author` の扱い、`git fetch --prune` などの安全チェック、`Co-Authored-By` 禁止、`git add .` 禁止などを定義する。"
 ---
 
 # コミットメッセージ
