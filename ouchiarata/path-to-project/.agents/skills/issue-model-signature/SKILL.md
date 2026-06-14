@@ -51,4 +51,4 @@ OpenAI GPT-5.5 の場合（モデル名にバージョンが含まれるため `
 | Anthropic Claude Haiku 4.5 | `✳︎ Anthropic Claude Haiku 4.5` |
 | Anthropic Claude Fable 5 | `✳︎ Anthropic Claude Fable 5` |
 | OpenAI GPT-5.5 | `✳︎ OpenAI GPT-5.5` |
-| OpenAI Codex | `✳︎ OpenAI Codex` |
+| OpenAI GPT-5.2-Codex | `✳︎ OpenAI GPT-5.2-Codex` |
