@@ -56,3 +56,4 @@
 | `google-analytics` | GA 連携・同意管理（Consent Mode）の実装・変更時 |
 | `e2e-testing` | ユーザー向け主要フロー / UI 変更 / フロー成功条件変更後の E2E テスト作成・実行時 |
 | `refresh-skills` | スキル追加・削除・リネーム時、`.claude/skills/` のシンボリックリンクや `CLAUDE.md` のスキル表の整合性確認・修復時、上流リポジトリからスキル定義を取り込み直す時 |
+| `issue-model-signature` | GitHub Issue 本体、Issue コメント、PR 本文、PR コメントを書く・更新する時 |
