@@ -32,6 +32,7 @@
 | `motivational-interviewing` | Miller & Rollnick（1991）動機づけ面接 OARS 技法（開かれた質問・是認・反映的傾聴・要約）でユーザーの内発的動機を引き出す時 |
 | `narrative-elicitation` | ナラティブ引き出し法・IME により物語・比喩・仮想シナリオ・対比を通じて言語化しにくい暗黙知を引き出す時 |
 | `socratic-questioning` | Paul & Elder（2007）× Chang（2023）ソクラテス式質問法と産婆術でユーザーの論理構造・前提・根拠を可視化し思考を精緻化する時 |
+| `m4l-project` | Max for Live デバイス、`.maxpat` / `.amxd`、Max JS、MIDI/Audio I/O、Presentation UI、Ableton User Library インストール、リリース梱包を追加・変更する時 |
 
 # スキル運用
 
