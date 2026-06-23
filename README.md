@@ -1,29 +1,35 @@
-# Agent Instructions
+# philtzjp/skills
 
-> A collection of instruction documents for AI agents used by Philtz members.
+> A library of skill definitions for AI agents used by Philtz members.
 
-PhiltzメンバーがAIエージェントに与える指示ドキュメントをまとめたリポジトリです。
+Philtz が AI エージェント（[Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Codex CLI](https://developers.openai.com/codex), [GitHub Copilot](https://github.com/features/copilot), [Cursor](https://cursor.com/) 等）に与える場面依存スキルを集約した正本リポジトリです。
 
 ---
 
 ## Structure
 
-各ディレクトリにメンバーごとの指示ファイルが格納されています。
-
 ```
-├── ouchiarata/              # 各メンバー名フォルダがホームディレクトリとする
-│   └── path-to-project/     # このフォルダ内は各プロジェクトのルートディレクトリとする
-│       ├── CLAUDE.md        # Claude Code 用の指示ファイル
-│       └── AGENTS.md        # Codex CLI 等の指示ファイル
-└── ...
+.
+├── .agents/
+│   └── skills/        # スキル定義の正本（<name>/SKILL.md）
+├── .claude/
+│   └── skills/        # .agents/skills/<name> への相対シンボリックリンク
+├── AGENTS.md          # メタ指示（リポジトリ運用ルール、スキル表）
+├── CLAUDE.md          # AGENTS.md へのシンボリックリンク
+├── LICENSE
+├── README.md
+└── .gitignore
 ```
 
 ## Usage
 
-`CLAUDE.md`は[Claude Code](https://docs.anthropic.com/en/docs/claude-code)がプロジェクトのコンテキストとして読み込む設定ファイルです。
-`AGENTS.md`は[Codex CLI](https://developers.openai.com/codex)や[GitHub Copilot](https://github.com/features/copilot)、[Cursor](https://cursor.com/)などがプロジェクトの指示として読み込むファイルです。
+各プロジェクトで本リポジトリのスキルを採用する場合は、`.agents/skills/<name>/SKILL.md` を取り込み、`.claude/skills/<name>` から `../../.agents/skills/<name>` への相対シンボリックリンクで参照する構造を作ってください。導入手順とスキル選定の詳細は `.agents/skills/skill-selection/SKILL.md` と `.agents/skills/refresh-skills/SKILL.md` を参照してください。
 
-`membername/path-to-project/CLAUDE.md`は、**リポジトリルート**に配置することで、`membername/.claude/`は`~./claude`に配置することで、共通の指示として適用できます。
+`AGENTS.md` は Codex CLI / GitHub Copilot / Cursor などが、`CLAUDE.md` は Claude Code がプロジェクトのコンテキストとして読み込む設定ファイルです。本リポジトリでは `CLAUDE.md` を `AGENTS.md` への symlink としています。
+
+## License
+
+[MIT](./LICENSE)
 
 ## Connect with Us
 

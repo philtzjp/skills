@@ -1,4 +1,3 @@
-AFFECT.md
 .DS_Store
-./.claude
-./.agents
+AFFECT.md
+.claude/settings.local.json
