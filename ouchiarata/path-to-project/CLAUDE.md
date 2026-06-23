@@ -57,3 +57,4 @@
 | `e2e-testing` | ユーザー向け主要フロー / UI 変更 / フロー成功条件変更後の E2E テスト作成・実行時 |
 | `refresh-skills` | スキル追加・削除・リネーム時、`.claude/skills/` のシンボリックリンクや `CLAUDE.md` のスキル表の整合性確認・修復時、上流リポジトリからスキル定義を取り込み直す時 |
 | `issue-model-signature` | GitHub Issue 本体、Issue コメント、PR 本文、PR コメントを書く・更新する時 |
+| `skill-escalation` | 既存スキル通りに進まない時、Web 検索で異なる情報が得られた時、条件分岐の厳守がスタックの自由度を制限する時にスキル本体をローカルで改変し、有用な変更を `philtzjp/PHILTZ.md` の Issue として起票する時 |
