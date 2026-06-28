@@ -21,7 +21,6 @@
 | `google-analytics` | GA 連携・同意管理（Consent Mode）の実装・変更時 |
 | `e2e-testing` | ユーザー向け主要フロー / UI 変更 / フロー成功条件変更後の E2E テスト作成・実行時 |
 | `refresh-skills` | スキル追加・削除・リネーム時、`.claude/skills/` のシンボリックリンクや `AGENTS.md` / `CLAUDE.md` のスキル表の整合性確認・修復時、上流リポジトリからスキル定義を取り込み直す時 |
-| `issue-model-signature` | GitHub Issue 本体、Issue コメント、PR 本文、PR コメントを書く・更新する時 |
 | `skill-escalation` | 既存スキル通りに進まない時、Web 検索で異なる情報が得られた時、条件分岐の厳守がスタックの自由度を制限する時にスキル本体をローカルで改変し、有用な変更を `philtzjp/skills` の Issue として起票する時 |
 | `skill-selection` | 上流リポジトリからスキル群を初期導入する時、新規スキルを採用するか判断する時、不要になったスキルを除外する時、`AGENTS.md` / `CLAUDE.md` のスキル表や記述を採用構成に合わせて書き換える時 |
 | `active-listening` | Rogers（1951）来談者中心療法的傾聴を行う時、ユーザーが安全に暗黙知を語れる対話空間が必要な時 |
@@ -34,6 +33,38 @@
 | `socratic-questioning` | Paul & Elder（2007）× Chang（2023）ソクラテス式質問法と産婆術でユーザーの論理構造・前提・根拠を可視化し思考を精緻化する時 |
 | `m4l-project` | Max for Live デバイス、`.maxpat` / `.amxd`、Max JS、MIDI/Audio I/O、Presentation UI、Ableton User Library インストール、リリース梱包を追加・変更する時 |
 
+# 署名規約（Issue / PR / コメント）
+
+GitHub Issue 本体・Issue コメント・PR 本文・PR コメントを書く / 更新するとき（`gh issue create` / `gh pr create` / `gh issue comment` / `gh pr comment` 等の全経路を含む）は、本セクションを常時適用する。
+
+1. MUST: 本文の先頭行に、書き手であるエージェント自身の署名を `✳︎ <会社名> <モデル名> <バージョン>` 形式で入れる
+2. MUST: 署名行の次に空行を 1 行入れ、その後に本文を続ける
+3. MUST: モデル名がバージョン番号を含む場合（例: `GPT-5.5`）は `<バージョン>` 部分を省略する
+4. MUST: 署名は U+2733 EIGHT SPOKED ASTERISK (`✳︎`) で始める
+5. NEVER: 署名を本文の途中・末尾に置かない
+6. NEVER: 署名行と本文の間の空行を省略しない
+7. NEVER: 署名行に日時、ID、装飾文字、その他追加情報を含めない
+
+形式:
+
+```
+✳︎ <会社名> <モデル名> <バージョン>
+
+<本文>
+```
+
+主なエージェントの署名（参考）:
+
+| エージェント | 署名 |
+| --- | --- |
+| Anthropic Claude Opus 4.8 | `✳︎ Anthropic Claude Opus 4.8` |
+| Anthropic Claude Opus 4.7 | `✳︎ Anthropic Claude Opus 4.7` |
+| Anthropic Claude Sonnet 4.6 | `✳︎ Anthropic Claude Sonnet 4.6` |
+| Anthropic Claude Haiku 4.5 | `✳︎ Anthropic Claude Haiku 4.5` |
+| Anthropic Claude Fable 5 | `✳︎ Anthropic Claude Fable 5` |
+| OpenAI GPT-5.5 | `✳︎ OpenAI GPT-5.5` |
+| OpenAI GPT-5.2-Codex | `✳︎ OpenAI GPT-5.2-Codex` |
+
 # スキル運用
 
 本リポジトリ内でスキルを追加・改変・選定する際は、以下のメタスキルに従う:
@@ -43,4 +74,3 @@
 - `skill-escalation`: スキル本体の改良提案を本リポジトリへ Issue として起票
 - `commit-and-git`: Git / GitHub 操作の規約
 - `issue-branch-pr-flow`: パッチ以外の実装作業の Issue / PR フロー
-- `issue-model-signature`: Issue / PR 本文の署名規約
