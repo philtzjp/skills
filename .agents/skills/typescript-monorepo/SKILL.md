@@ -18,3 +18,30 @@ description: 新規パッケージの追加、`turbo.json` / `pnpm-workspace.yam
 12. MUST: 内部依存関係には `workspace:*` プロトコルを使用する
 13. SHOULD: デフォルトは JIT（Just-in-Time）コンパイルパターンを採用する; IF: コンパイル済み（`tsc` → `dist/`）への切り替えを明示的に要求された; THEN: 切り替える
 14. NEVER: ネストしたパッケージを作成しない; NEVER: Turborepo をグローバルにインストールしない — `pnpm exec turbo` またはルートの devDependency を使用する
+
+## package.json の生成・更新
+
+1. MUST: `package.json` の新規作成は `pnpm init` または `pnpm create <template>` で行う; NEVER: ルート・`apps/*`・`packages/*` のいずれでも `package.json` をゼロから手書きしない
+2. MUST: 依存関係の追加・更新・削除は `pnpm add` / `pnpm update` / `pnpm remove` で行う; IF: 対象がルート以外のパッケージ; THEN MUST: `--filter <パッケージ名>` で対象を指定する; IF: ワークスペース内部依存を追加する; THEN MUST: `--workspace` を併用して `workspace:*` で解決させる
+3. MUST: ルートへの devDependency 追加は `pnpm add -D -w <pkg>` を使用する
+4. MAY: pnpm コマンドで設定できないフィールド（`name` のスコープ化、`private`、`exports`、`scripts` 等）に限り、コマンド生成済みの `package.json` へ最小限の編集を行う; NEVER: `dependencies` / `devDependencies` / `peerDependencies` を直接編集しない
+
+### 手順例
+
+```sh
+# 1. ルートワークスペース作成
+mkdir my-monorepo && cd my-monorepo
+pnpm init                                # ルート package.json を生成する
+# pnpm-workspace.yaml を作成し apps/* と packages/* を定義する
+pnpm add -D -w turbo typescript          # ルートの devDependency はコマンドで追加する
+
+# 2. 責務パッケージ追加（例: packages/log）
+mkdir -p packages/log
+(cd packages/log && pnpm init)           # package.json を生成する
+# name を @<org>/log に変更し、private / exports を最小限の編集で設定する
+
+# 3. アプリ追加（例: apps/dashboard）
+pnpm create next-app@latest apps/dashboard   # フレームワークの scaffolder で生成する
+pnpm add --filter @<org>/dashboard --workspace @<org>/log   # 内部依存は workspace:* で追加する
+pnpm add --filter @<org>/dashboard zod                      # 外部依存もコマンドで追加する
+```
