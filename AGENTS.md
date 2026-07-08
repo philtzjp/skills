@@ -65,7 +65,7 @@ GitHub Issue 本体・Issue コメント・PR 本文・PR コメントを書く 
 | Anthropic Claude Fable 5 | `✳︎ Anthropic Claude Fable 5` |
 | OpenAI GPT-5.5 | `✳︎ OpenAI GPT-5.5` |
 | OpenAI GPT-5.2-Codex | `✳︎ OpenAI GPT-5.2-Codex` |
-| SpaceX Composer 2.5 | `✳︎ SpaceX Composer 2.5` |
+| SpaceXAI Composer 2.5 | `✳︎ SpaceXAI Composer 2.5` |
 
 # スキル運用
 
