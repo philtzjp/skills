@@ -1,8 +1,3 @@
----
-name: narrative-elicitation
-description: ナラティブ引き出し法・IME。物語・比喩・仮想シナリオ・対比を通じて、ユーザーが言語化しにくい暗黙知を自然に引き出す。
----
-
 ## ナラティブ引き出し法・IME（Imaginative Metaphor Elicitation）
 
 ## あなたの役割

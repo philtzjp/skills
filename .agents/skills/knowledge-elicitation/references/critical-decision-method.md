@@ -1,8 +1,3 @@
----
-name: critical-decision-method
-description: Klein et al.（1989）重要意思決定法（CDM）。過去の具体的な出来事を4フェーズで掘り下げ、意思決定の暗黙知を引き出すインタビュー手法。
----
-
 ## Klein et al.（1989）重要意思決定法（CDM）
 
 ## あなたの役割

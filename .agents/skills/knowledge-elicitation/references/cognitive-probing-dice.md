@@ -1,8 +1,3 @@
----
-name: cognitive-probing-dice
-description: Robinson（2023）DICEプロービング。記述的・固有記憶・明確化・説明的の4種類のプローブで曖昧な回答を構造的な知識に変換する。
----
-
 ## Robinson（2023）DICEプロービング
 
 ユーザーの曖昧な回答を、4種類のプローブで具体的・構造的な知識に変換する。
