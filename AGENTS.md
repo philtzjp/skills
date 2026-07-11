@@ -24,14 +24,7 @@
 | `refresh-skills` | スキル追加・削除・リネーム時、`.claude/skills/` のシンボリックリンクや `AGENTS.md` / `CLAUDE.md` のスキル表の整合性確認・修復時、上流リポジトリからスキル定義を取り込み直す時 |
 | `skill-escalation` | 既存スキル通りに進まない時、Web 検索で異なる情報が得られた時、条件分岐の厳守がスタックの自由度を制限する時にスキル本体をローカルで改変し、有用な変更を `philtzjp/skills` の Issue として起票する時 |
 | `skill-selection` | 上流リポジトリからスキル群を初期導入する時、新規スキルを採用するか判断する時、不要になったスキルを除外する時、`AGENTS.md` / `CLAUDE.md` のスキル表や記述を採用構成に合わせて書き換える時 |
-| `active-listening` | Rogers（1951）来談者中心療法的傾聴を行う時、ユーザーが安全に暗黙知を語れる対話空間が必要な時 |
-| `cognitive-probing-dice` | Robinson（2023）DICE プロービングで曖昧な回答を記述的・固有記憶・明確化・説明的の 4 プローブにより構造的知識へ変換する時 |
-| `critical-decision-method` | Klein et al.（1989）CDM で過去の具体的な出来事を 4 フェーズで掘り下げ、意思決定の暗黙知をインタビューで引き出す時 |
-| `devils-advocate` | MacDougall & Baum（1997）悪魔の代弁者としてユーザーの前提に挑戦し、スティールマン反論で知識を鍛える時 |
-| `dialectical-inquiry` | Hegel / Mason（1969）弁証法的探究でテーゼ → アンチテーゼ → ジンテーゼの三段階により矛盾・対立を建設的に統合する時 |
-| `motivational-interviewing` | Miller & Rollnick（1991）動機づけ面接 OARS 技法（開かれた質問・是認・反映的傾聴・要約）でユーザーの内発的動機を引き出す時 |
-| `narrative-elicitation` | ナラティブ引き出し法・IME により物語・比喩・仮想シナリオ・対比を通じて言語化しにくい暗黙知を引き出す時 |
-| `socratic-questioning` | Paul & Elder（2007）× Chang（2023）ソクラテス式質問法と産婆術でユーザーの論理構造・前提・根拠を可視化し思考を精緻化する時 |
+| `knowledge-elicitation` | 暗黙知を対話で引き出す時（傾聴・インタビュー・曖昧な回答の具体化・過去の意思決定の掘り下げ・前提への挑戦・矛盾の統合・動機の引き出し・思考の精緻化）。Rogers 傾聴・DICE・CDM・悪魔の代弁者・弁証法的探究・動機づけ面接 OARS・ナラティブ引き出し・ソクラテス式質問の 8 技法を統合 |
 | `m4l-project` | Max for Live デバイス、`.maxpat` / `.amxd`、Max JS、MIDI/Audio I/O、Presentation UI、Ableton User Library インストール、リリース梱包を追加・変更する時 |
 
 # 署名規約（Issue / PR / コメント）

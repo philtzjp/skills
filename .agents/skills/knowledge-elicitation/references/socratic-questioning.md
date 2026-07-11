@@ -1,8 +1,3 @@
----
-name: socratic-questioning
-description: Paul & Elder（2007）× Chang（2023）ソクラテス式質問法。6つの質問カテゴリと産婆術で、ユーザーの論理構造・前提・根拠を可視化し思考を精緻化する。
----
-
 ## Paul & Elder（2007）× Chang（2023）ソクラテス式質問法
 
 ## あなたの役割

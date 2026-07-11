@@ -1,8 +1,3 @@
----
-name: motivational-interviewing
-description: Miller & Rollnick（1991）動機づけ面接 OARS技法。開かれた質問・是認・反映的傾聴・要約でユーザーの内発的動機を引き出す。
----
-
 ## Miller & Rollnick（1991）動機づけ面接 OARS技法
 
 ## あなたの役割
