@@ -1,54 +1,90 @@
 ---
 name: skill-selection
-description: 上流リポジトリ (`philtzjp/skills`) から自プロジェクトへスキル群を導入する際、新規スキルを採用するか判断する際、既存スキルが自プロジェクトで不要になり除外する際に参照する。プロジェクトの技術スタック・運用ルール・チーム慣習に照らして必要なスキルのみを残し、`AGENTS.md` / `CLAUDE.md` のスキル表と `.agents/skills/` / `.claude/skills/` 配下を一致させる選定手順を定義する。
+description: どのスキルを導入するか決める。全員が入れる既定のスキル、作業に応じて追加するスキル、npx skills によるホームへの導入と削除、統合済みの旧スキルを入れない判断、リポジトリ固有のスキルを置くかどうかの判断を定義する。スキルを初めて導入するとき、philtzjp/skills に新しいスキルが追加されたとき、作業に必要なスキルが入っていないとき、不要になったスキルを外すときに使う。
 ---
 
-# スキルの選定
+# skill-selection
 
-## 発火タイミング
+## 方針
 
-1. 自プロジェクトを新規セットアップしてスキル群を初期導入する
-2. 上流リポジトリで新規スキルが追加され、自プロジェクトに取り込むか判断する
-3. プロジェクトの技術スタック・運用方針が変わり、既存スキルの要不要を再評価する
-4. 不要なスキルを除外する
+philtzjp/skills のスキルは、各メンバーのホームに `npx skills` で導入します。作業対象リポジトリにはコピーしません。
 
-## 採用判断
+ホームに入れたスキルは、そのメンバーのすべてのリポジトリの作業に効きます。導入も削除も、ユーザーの許可を得てから行ってください。
 
-1. MUST: 各スキルの frontmatter `description`、発火タイミング、本文 MUST/NEVER を読み、自プロジェクトの技術スタック・運用ルール・チーム慣習と照合する
-2. MUST: 採用基準を満たさないスキルは導入しない（unused skill はメンテ対象と矛盾源を増やすので除外する）
-3. SHOULD: 「いつか必要かもしれない」段階のスキルは導入を保留する; 実際に使う段階で取り込む
-4. NEVER: 上流から無条件に全スキルを取り込まない
-5. NEVER: 採用していないスキル名を運用ルール・コードルール・他スキル本文から参照する（参照する場合はそのスキルも採用する）
+## 既定のスキル
 
-## 新規導入
+全員が入れるスキルは次の 3 つです。
 
-1. MUST: 上流リポジトリ `philtzjp/skills` から対象スキル `<name>` の `SKILL.md` を取得する（`git show`、`gh api`、上流クローン参照など）
-2. MUST: 自プロジェクトの `.agents/skills/<name>/SKILL.md` として配置する
-3. MUST: `.claude/skills/<name>` を `../../.agents/skills/<name>` への相対シンボリックリンクとして作成する
-4. MUST: `AGENTS.md` または `CLAUDE.md`（実体ファイル）のスキル表に新規スキル名と発火タイミングの行を追加する
-5. MUST: `refresh-skills` の整合性検査を実行する
-6. NEVER: `.claude/skills/<name>` だけ作成して `.agents/skills/<name>/SKILL.md` の正本を欠落させる
+- github
+- japanese
+- turborepo
 
-## 削除
+```sh
+DISABLE_TELEMETRY=1 npx skills add philtzjp/skills -g -a claude-code -a codex -a cursor -s github -s japanese -s turborepo -y
+```
 
-1. MUST: `.agents/skills/<name>/` ディレクトリを削除する
-2. MUST: `.claude/skills/<name>` のシンボリックリンクを削除する
-3. MUST: `AGENTS.md` または `CLAUDE.md`（実体ファイル）のスキル表から該当行を削除する
-4. MUST: 当該スキル名を参照する他スキル・運用ルール・コードルールを検索し、参照を更新または削除する
-5. MUST: `refresh-skills` の整合性検査を実行する
+実体は `~/.agents/skills/<スキル名>/` に置かれ、`~/.claude/skills/<スキル名>` からシンボリックリンクが張られます。Codex と Cursor は前者を、Claude Code は後者を読みます。
 
-## AGENTS.md / CLAUDE.md の取り扱い
+## 作業に応じて追加するスキル
 
-1. MUST: スキル表の正本は実体ファイル側に置く
-2. IF: `AGENTS.md` が存在し `CLAUDE.md` がそのシンボリックリンク; THEN MUST: `AGENTS.md` を編集する
-3. IF: `CLAUDE.md` のみ存在する; THEN MUST: `CLAUDE.md` を編集する
-4. MUST: スキル表は採用済みスキル（`.agents/skills/<name>/SKILL.md` が存在するもの）と完全一致させる
-5. MUST: 採用しないスキルに依存する記述（コードルール / 運用ルール / パッケージ規約など）は、採用するスキル構成に合わせて書き換える
-6. NEVER: スキル表に未導入のスキルを記載しない
-7. NEVER: 採用していないスキルに依存する MUST / NEVER ルールを `AGENTS.md` / `CLAUDE.md` に残す
+実際にその作業をするときに追加します。「いつか使うかもしれない」段階では入れないでください。読み込まれるスキルが増えるほど、関係のない規約が作業に混ざります。
 
-## 関連スキル
+| スキル | 追加する場面 |
+| --- | --- |
+| hono | HTTP API を設計・実装する |
+| db | データベースの選定、スキーマ、接続、マイグレーション、データ移行を扱う |
+| e2etest | E2E テストを作成・実行する |
+| analytics | アクセス解析や同意管理を実装する |
+| errorpage | エラー応答やエラーページを設計する |
+| cursor-hook-authoring | Cursor Cloud Agent の Git hook 連鎖を扱う |
+| knowledge-elicitation | 対話でユーザーの暗黙知を引き出す |
+| m4l-project | Max for Live デバイスを扱う |
 
-- `refresh-skills`: スキル追加・削除後の整合性検査と修復手順
-- `skill-escalation`: スキル本体の改良提案を上流に起票する手順
-- `github`: 変更内容のコミット手順
+一覧は増えることがあります。最新の一覧は次で確認してください。
+
+```sh
+DISABLE_TELEMETRY=1 npx skills add philtzjp/skills --list
+```
+
+追加するときは、スキル名だけを指定します。
+
+```sh
+DISABLE_TELEMETRY=1 npx skills add philtzjp/skills -g -a claude-code -a codex -a cursor -s <スキル名> -y
+```
+
+refresh-skills、skill-selection、skill-escalation は、スキルそのものを扱う作業のときに読むスキルです。ホームに入れても、必要なときに philtzjp/skills から直接読んでもかまいません。
+
+## 入れないスキル
+
+次は統合済みの旧スキルで、中身は統合先への案内だけです。導入しないでください。
+
+| 旧スキル | 代わりに入れるスキル |
+| --- | --- |
+| commit-and-git、issue-branch-pr-flow | github |
+| japanese-writing | japanese |
+| typescript-monorepo | turborepo |
+| api-design | hono |
+| data-migration | db |
+| e2e-testing | e2etest |
+| google-analytics | analytics |
+
+## 外す
+
+使わなくなったスキルは、ユーザーの許可を得てから外します。
+
+```sh
+DISABLE_TELEMETRY=1 npx skills remove -g -y <スキル名>
+```
+
+既定の 3 つは外さないでください。
+
+## リポジトリ固有のスキルを置くか
+
+そのリポジトリでしか意味を持たない規約は、ホームではなくリポジトリに置いてかまいません。
+
+- まず、AGENTS.md に数行書けば足りないかを考える。足りるなら AGENTS.md に書く。
+- スキルにするなら、`.agents/skills/<スキル名>/SKILL.md` に正本を置き、`.claude/skills/<スキル名>` から相対シンボリックリンクを張り、AGENTS.md のスキル表に行を足す。突き合わせの手順は refresh-skills に書いてある。
+- philtzjp/skills と同じ名前にしない。
+- 他のリポジトリでも役立つと分かったら、skill-escalation に従って philtzjp/skills への追加を提案する。
+
+AGENTS.md には、導入していないスキルを前提にした規約を書かないでください。
