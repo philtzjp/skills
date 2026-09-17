@@ -5,7 +5,7 @@
 
 # このリポジトリについて
 
-本リポジトリ `philtzjp/skills` は、Philtz が AI エージェント（Claude Code、Codex CLI、GitHub Copilot、Cursor 等）に与える場面依存スキルを集約した正本リポジトリです。各スキルは特定状況下で守るべき `MUST` / `NEVER` を定義します。各プロジェクトは本リポジトリからスキルを選択的に取り込みます。
+本リポジトリ `philtzjp/skills` は、Philtz が AI エージェント（Claude Code、Codex CLI、GitHub Copilot、Cursor 等）に与える場面依存スキルを集約した正本リポジトリです。各スキルは特定状況下で守るべき `MUST` / `NEVER` を定義します。スキルは各メンバーのホームに `npx skills add philtzjp/skills -g ...` で導入し、各プロジェクトにはコピーしません。導入手順は [philtzjp/how-to-use-github](https://github.com/philtzjp/how-to-use-github) の `AGENTS.md` にあります。
 
 # スキル
 
@@ -30,9 +30,9 @@
 | `typescript-monorepo` | `turborepo` に統合済み。`turborepo` への案内のみ |
 | `google-analytics` | `analytics` に統合済み。`analytics` への案内のみ |
 | `e2e-testing` | `e2etest` に統合済み。`e2etest` への案内のみ |
-| `refresh-skills` | スキル追加・削除・リネーム時、`.claude/skills/` のシンボリックリンクや `AGENTS.md` / `CLAUDE.md` のスキル表の整合性確認・修復時、上流リポジトリからスキル定義を取り込み直す時 |
-| `skill-escalation` | 既存スキル通りに進まない時、Web 検索で異なる情報が得られた時、条件分岐の厳守がスタックの自由度を制限する時にスキル本体をローカルで改変し、有用な変更を `philtzjp/skills` の Issue として起票する時 |
-| `skill-selection` | 上流リポジトリからスキル群を初期導入する時、新規スキルを採用するか判断する時、不要になったスキルを除外する時、`AGENTS.md` / `CLAUDE.md` のスキル表や記述を採用構成に合わせて書き換える時 |
+| `refresh-skills` | 作業開始時のホームのスキルの確認・更新時、作業対象リポジトリに残ったスキルのコピーを移行する時、スキル追加・削除・リネーム時の正本・シンボリックリンク・スキル表の突き合わせ時 |
+| `skill-escalation` | 既存スキル通りに進まない時、Web 検索で異なる情報が得られた時、条件の厳守が最良の結果を妨げる時に、スキルの改良を正本リポジトリへ提案する時 |
+| `skill-selection` | ホームに導入するスキルを決める時、作業に必要なスキルを追加する時、不要になったスキルを外す時、リポジトリ固有のスキルを置くか判断する時 |
 | `knowledge-elicitation` | 暗黙知を対話で引き出す時（傾聴・インタビュー・曖昧な回答の具体化・過去の意思決定の掘り下げ・前提への挑戦・矛盾の統合・動機の引き出し・思考の精緻化）。Rogers 傾聴・DICE・CDM・悪魔の代弁者・弁証法的探究・動機づけ面接 OARS・ナラティブ引き出し・ソクラテス式質問の 8 技法を統合 |
 | `m4l-project` | Max for Live デバイス、`.maxpat` / `.amxd`、Max JS、MIDI/Audio I/O、Presentation UI、Ableton User Library インストール、リリース梱包を追加・変更する時 |
 
@@ -73,7 +73,7 @@ GitHub Issue 本体・Issue コメント・PR 本文・PR コメントを書く 
 
 本リポジトリ内でスキルを追加・改変・選定する際は、以下のメタスキルに従う:
 
-- `refresh-skills`: スキル追加・削除・リネーム時の整合性検査・修復、上流からの取り込み手順
-- `skill-selection`: 上流リポジトリからのスキル選定と `AGENTS.md` / `CLAUDE.md` 更新
-- `skill-escalation`: スキル本体の改良提案を本リポジトリへ Issue として起票
+- `refresh-skills`: スキル追加・削除・リネーム時の正本・シンボリックリンク・スキル表の突き合わせ。本リポジトリではスキルを削除・リネームせず、統合先への案内に置き換える
+- `skill-selection`: ホームに導入するスキルの選び方
+- `skill-escalation`: スキルの改良提案を本リポジトリへ Issue として起票
 - `github`: Git / GitHub 操作の規約と、パッチ以外の実装作業の Issue / PR フロー
