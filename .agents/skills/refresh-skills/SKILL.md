@@ -1,73 +1,123 @@
 ---
 name: refresh-skills
-description: スキルの追加・削除・リネーム時、`.claude/skills/` のシンボリックリンクが切れている疑いがあるとき、`AGENTS.md` / `CLAUDE.md` のスキル表とディレクトリ実体が乖離しているとき、上流リポジトリ (`philtzjp/skills`) からスキル定義を取り込み直すときに参照する。`.agents/skills/<name>/SKILL.md`（正本）、`.claude/skills/<name>`（相対シンボリックリンク）、`AGENTS.md` / `CLAUDE.md` のスキル表の三者を整合させる検査・修復手順、および上流からの同期手順を定義する。
+description: スキルを最新にする、作業対象リポジトリに残ったスキルのコピーを移行する、スキルの正本とシンボリックリンクとスキル表を突き合わせる。npx skills によるホームのスキルの確認と更新、philtzjp/skills のコピーの削除提案、ローカル改変の扱い、リポジトリ固有のスキルと philtzjp/skills 本体の整合性検査を定義する。作業を始めるとき、上流からスキルを取り込み直すとき、.agents/skills や .claude/skills に philtzjp/skills と同名のスキルを見つけたとき、スキルを追加・削除・リネームしたときに使う。
 ---
 
-# スキル整合性のリフレッシュ
+# refresh-skills
 
-本スキルでは「エージェント指示ファイル」を `AGENTS.md`（正本）または `CLAUDE.md`（`AGENTS.md` への symlink、または単独の正本）として扱う。プロジェクトの構成に応じて読み替える。
+## 方針
 
-## 原則
+philtzjp/skills のスキルは、各メンバーのホームに `npx skills` で導入します。作業対象リポジトリにはコピーしません。コピーした時点から古くなり、上流の更新が届かなくなるためです。
 
-1. MUST: スキルの正本は `.agents/skills/<name>/SKILL.md` に置く; NEVER: `.claude/skills/<name>/SKILL.md` を実ファイルとして編集しない
-2. MUST: `.claude/skills/<name>` は `../../.agents/skills/<name>` への相対シンボリックリンクとして作成する; NEVER: 絶対パスのシンボリックリンクを作成しない
-3. MUST: エージェント指示ファイル（`AGENTS.md` / `CLAUDE.md`）のスキル表に列挙されたエントリと、`.agents/skills/` 配下のディレクトリ集合と、`.claude/skills/` 配下のシンボリックリンク集合の三者を一致させる
-4. MUST: スキル名は `kebab-case` を使用する
-5. NEVER: スキル本体に機密情報、トークン、認証情報を記載しない
+作業の入口は https://raw.githubusercontent.com/philtzjp/how-to-use-github/main/AGENTS.md です。導入するスキルの選び方は skill-selection に従ってください。
 
-## 発火タイミング
+以前は各リポジトリの `.agents/skills/` にスキルをコピーし、上流と同期していました。この手順はもう使いません。
 
-1. 新しいスキルを追加する
-2. 既存スキルを削除またはリネームする
-3. `.claude/skills/<name>` のシンボリックリンクが切れている／不正である疑いがある
-4. エージェント指示ファイルのスキル表とディレクトリ実体が一致していない疑いがある
-5. 上流 (`philtzjp/skills`) からスキル定義の更新を取り込みたい
+## ホームのスキルを最新にする
 
-## 上流からの同期
+作業を始めるたびに、導入済みのスキルを確認します。
 
-1. MUST: 同期前に `git fetch --prune` を実行する
-2. MUST: `.agents/skills/` および エージェント指示ファイルの差分を `git diff origin/main -- .agents/skills AGENTS.md CLAUDE.md` で確認する
-3. IF: 差分がある; THEN MUST: 取り込み方針（マージ / リベース / ピックアップ）をユーザーに確認する
-4. NEVER: ユーザーの確認なしに上流変更を強制取り込みしない
-5. MUST: 同期後に「整合性検査」と「整合性修復」を実行する
+```sh
+DISABLE_TELEMETRY=1 npx skills list -g
+```
 
-## 整合性検査
+Source が philtzjp/skills のスキルを、名前を指定して更新します。
 
-1. MUST: `.agents/skills/` 配下のディレクトリ一覧と、それぞれに `SKILL.md` が存在することを確認する
-2. MUST: `.claude/skills/` 配下のエントリがすべて `../../.agents/skills/<name>` 形式の相対シンボリックリンクであることを確認する
-3. MUST: `.agents/skills/<name>` に対応する `.claude/skills/<name>` が存在することを確認する
-4. MUST: `.claude/skills/<name>` の解決先が実在する `.agents/skills/<name>` ディレクトリであることを確認する
-5. MUST: エージェント指示ファイルのスキル表 (`| skill | 発火タイミング |`) に列挙された `skill` 名が、`.agents/skills/` 配下のディレクトリ集合と完全一致することを確認する
-6. MUST: 各 `SKILL.md` の frontmatter `name` フィールドがディレクトリ名と一致することを確認する
+```sh
+DISABLE_TELEMETRY=1 npx skills update <スキル名> <スキル名> -g -y
+```
 
-## 整合性修復
+- 名前を指定し、ユーザーが他の Source から入れたスキルには触れない。
+- 必要なスキルが入っていない、または Source が philtzjp/skills 以外なら、ユーザーの許可を得てから導入し直す。手順は skill-selection に書いてある。
+- 導入や更新ができなければ、推測で進めずにユーザーに報告する。
 
-1. IF: `.agents/skills/<name>/SKILL.md` が存在するのに `.claude/skills/<name>` が存在しない; THEN MUST: 相対シンボリックリンクを作成する: `ln -s ../../.agents/skills/<name> .claude/skills/<name>`
-2. IF: `.claude/skills/<name>` が実ファイル、または不正なリンク先を指している; THEN MUST: 削除して相対シンボリックリンクを作成し直す
-3. IF: `.claude/skills/<name>` の解決先 `.agents/skills/<name>` が存在しない（孤立シンボリックリンク）; THEN MUST: 削除する
-4. IF: エージェント指示ファイルのスキル表とディレクトリ集合が乖離している; THEN MUST: 表に行を追加・削除する
-5. IF: `SKILL.md` の frontmatter `name` がディレクトリ名と一致しない; THEN MUST: frontmatter を修正する
-6. MUST: 修復後、もう一度「整合性検査」を実行して再発しないことを確認する
+## 作業対象リポジトリに残ったコピーを移行する
 
-## スキル追加時の手順
+作業対象リポジトリの `.agents/skills/` と `.claude/skills/` を確認し、philtzjp/skills と同名のスキルがあれば、次の手順で移行を提案します。移行は github スキルの手順で PR にします。ユーザーの確認なしに削除しないでください。
 
-1. MUST: `.agents/skills/<name>/SKILL.md` を作成し、frontmatter に `name`（kebab-case のスキル名）と `description`（発火タイミングを具体的に説明する一文）を記述する
-2. MUST: `.claude/skills/<name>` を `../../.agents/skills/<name>` への相対シンボリックリンクとして作成する
-3. MUST: エージェント指示ファイルのスキル表に新しいスキル名と発火タイミングの行を追加する
-4. MUST: 「整合性検査」を実行する
-5. MUST: コミットは `github` スキルに従って行う
+上流にあるスキルの一覧は次で取得できます。
 
-## スキル削除時の手順
+```sh
+DISABLE_TELEMETRY=1 npx skills add philtzjp/skills --list
+```
 
-1. MUST: `.agents/skills/<name>/` ディレクトリを削除する
-2. MUST: `.claude/skills/<name>` のシンボリックリンクを削除する
-3. MUST: エージェント指示ファイルのスキル表から該当行を削除する
-4. MUST: 「整合性検査」を実行する
+### 1. コピーを分類する
 
-## スキルリネーム時の手順
+- **上流と同じ内容のコピー**：削除してよい。
+- **上流で統合済みの旧スキル**：削除してよい。統合先は次のとおり。
 
-1. MUST: `.agents/skills/<old-name>/` を `.agents/skills/<new-name>/` にリネームする
-2. MUST: リネーム後のディレクトリ内の `SKILL.md` の frontmatter `name` を `<new-name>` に更新する
-3. MUST: `.claude/skills/<old-name>` のシンボリックリンクを削除し、`.claude/skills/<new-name>` を `../../.agents/skills/<new-name>` への相対シンボリックリンクとして作成する
-4. MUST: エージェント指示ファイルのスキル表内の名前を更新する
-5. MUST: 「整合性検査」を実行する
+  | 旧スキル | 統合先 |
+  | --- | --- |
+  | commit-and-git、issue-branch-pr-flow | github |
+  | japanese-writing | japanese |
+  | typescript-monorepo | turborepo |
+  | api-design | hono |
+  | data-migration | db |
+  | e2e-testing | e2etest |
+  | google-analytics | analytics |
+
+- **上流と内容が違うコピー**：ローカルで改変されている可能性がある。削除する前に差分をユーザーに見せる。
+
+  ```sh
+  curl -fsSL https://raw.githubusercontent.com/philtzjp/skills/main/.agents/skills/<スキル名>/SKILL.md | diff - .agents/skills/<スキル名>/SKILL.md
+  ```
+
+  上流が古い版のまま改変されただけか、そのリポジトリ固有の事情による改変かをユーザーと判断する。他のリポジトリにも役立つ改変なら、skill-escalation に従って philtzjp/skills に提案する。そのリポジトリだけの事情なら、リポジトリ固有のスキルとして残すか、AGENTS.md に規約として書く。
+
+- **philtzjp/skills にないスキル**：リポジトリ固有のスキル。残す。
+
+### 2. 移行する
+
+1. 削除するスキル、または統合先のスキルが、ホームに導入されているか確認する。入っていなければ、ユーザーの許可を得て導入する。
+2. 削除するスキルの `.agents/skills/<スキル名>/` と `.claude/skills/<スキル名>` を削除する。
+3. AGENTS.md や CLAUDE.md のスキル表から、削除したスキルの行を消す。リポジトリ固有のスキルが残らなければ、スキル表ごと消す。
+4. AGENTS.md や CLAUDE.md の中で、削除したスキルを前提にした記述（「philtzjp/skills から取り込む」「refresh-skills で同期する」など）を消す。
+5. AGENTS.md に、how-to-use-github を読む案内を入れる。
+
+   ```markdown
+   ## 開発ルール
+
+   作業を始める前に、https://raw.githubusercontent.com/philtzjp/how-to-use-github/main/AGENTS.md を curl で取得して全文を読み、書かれている手順に従ってください。
+   ```
+
+6. `scripts/refresh-skills.sh` や `.cursor/environment.json` のように、コピーの同期を前提にした仕組みがあれば、ユーザーに伝えて扱いを決める。リポジトリ固有のスキルが残るなら整合性検査に使えるが、上流との差分確認は不要になる。
+
+## スキルの正本とシンボリックリンクを突き合わせる
+
+リポジトリ固有のスキルがあるリポジトリと、philtzjp/skills 本体では、次の 4 つが一致している必要があります。
+
+- `.agents/skills/<スキル名>/SKILL.md`（正本）
+- `.claude/skills/<スキル名>`（`../../.agents/skills/<スキル名>` への相対シンボリックリンク）
+- AGENTS.md のスキル表の行
+- SKILL.md の frontmatter の `name`
+
+確認すること。
+
+- 正本は `.agents/skills/` に置く。`.claude/skills/` の下に実ファイルを置かない。
+- シンボリックリンクは相対パスにする。絶対パスにしない。
+- リンク切れがない。対応するリンクが欠けていない。
+- スキル表とディレクトリの集合が一致している。
+- スキル名は kebab-case。frontmatter の `name` がディレクトリ名と一致している。
+- スキル本体に機密情報、トークン、認証情報を書いていない。
+
+直し方。
+
+- リンクが欠けている：`ln -s ../../.agents/skills/<スキル名> .claude/skills/<スキル名>`
+- リンクが実ファイル、または別の場所を指している：削除して作り直す。
+- リンク先がない：リンクを削除する。
+- スキル表とディレクトリがずれている：表の行を足すか消す。
+- `name` がディレクトリ名と違う：frontmatter を直す。
+
+直したら、もう一度突き合わせて一致を確認してください。
+
+## スキルを追加・削除・リネームする
+
+リポジトリ固有のスキル、または philtzjp/skills 本体のスキルを変えるときの手順です。
+
+- **追加**：`.agents/skills/<スキル名>/SKILL.md` を作り、frontmatter に `name` と `description`（どんな場面で使うかを具体的に書く）を入れる。シンボリックリンクを作り、スキル表に行を足す。
+- **削除**：ディレクトリ、シンボリックリンク、スキル表の行を消す。他のスキルや AGENTS.md からの参照も探して直す。
+- **リネーム**：ディレクトリ名と frontmatter の `name` を変え、シンボリックリンクを作り直し、スキル表と参照を直す。
+
+どれも最後に突き合わせを行い、github スキルに従ってコミットしてください。
+
+philtzjp/skills 本体では、スキルを削除したりリネームしたりしないでください。古い版のコピーを持つリポジトリや、ホームに導入済みの環境で、スキルが見つからなくなります。役目を終えたスキルは、統合先を案内する内容に置き換えて残します。
