@@ -1,44 +1,20 @@
 ---
 name: commit-and-git
-description: "コミット、プッシュ、ブランチ作成/切り替え/削除、マージ、リベース、`gh pr merge` による PR マージなどあらゆる Git / GitHub 操作を行うときに参照する。コミットメッセージのフォーマット (`type(scope): 説明`)、マージコミット件名 (`merge(scope): 説明`) の `--subject` / `--body \"\"` 指定、`--author` の扱い、`git fetch --prune` などの安全チェック、マージコミット件名・本文への PR/Issue 番号 (`#N`) 禁止、`Co-Authored-By` 禁止、`git add .` 禁止などを定義する。"
+description: コミット、プッシュ、ブランチ作成や切り替え、マージ、リベース、gh pr merge など Git / GitHub の操作を行うときに参照する。このスキルは github スキルに統合した。内容は github スキルを使う。
 ---
 
-# コミットメッセージ
-1. MUST: `type: 説明（日本語、短い文）` のフォーマットを使用する
-2. IF: モノレポ; THEN MUST: `type(scope): 説明（日本語、短い文）` のフォーマットを使用し、説明を短く保つためにカッコ表記は用いない。
-3. MUST: `scope` にはファイル変更のあったトップレベルディレクトリ名（リポジトリ直下のディレクトリ名）を使用する; IF: Turborepo などのモノレポで `apps/` や `packages/` 配下を変更する; THEN MUST: 配下のパッケージ／アプリ名（leaf 名）を使用する（例: `apps/dashboard` の変更なら `dashboard`、`packages/log` の変更なら `log`）; MUST: リポジトリ全体に関わる変更は `repo` を使用する; MUST: 隠しディレクトリは先頭ドットを含めて書く（`agents` ではなく `.agents`）
-4. NEVER: `scope` にスラッシュを含めて階層を表現しない; NEVER: `apps` / `packages` などモノレポの親ディレクトリ自体を `scope` に使用しない; NEVER: `workspace` / `design` など実体のない総称、存在しないフォルダ名を `scope` に使用しない（NG: `feat(workspace): ...` / `feat(design): ...` / `feat(agents): ...` / `feat(apps): ...` / `feat(packages): ...` / `feat(apps/dashboard): ...` / `feat(packages/log): ...` → OK: `feat(repo): ...` / `feat(.agents): ...` / `feat(.claude): ...` / `feat(dashboard): ...` / `feat(log): ...`）
-5. MUST: 説明は動作で終える（OK: `〜する` / `〜追加` / `〜修正` / `〜削除` / `〜実装` など）; NEVER: 動作を伴わない名詞で終える（NG: `feat(api): ユーザー認証` → OK: `feat(api): ユーザー認証を追加`）; NEVER: 説明に emoji を含めない
-6. MUST: 論理的なスコープ（パッケージ、機能）ごとにコミットを分割する; NEVER: 無関係な変更をまとめてコミットしない
-7. 変更をコミットする際:
-   - ファイルごとに `git diff` を実行して各変更の作者を確認する。
-   - NEVER: committer を上書きしない（常にユーザーの git config を使用する）
-   - IF: すべての変更がエージェントによって生成された（ユーザー編集行がない）; THEN MUST: `--author` のみで自身のエージェント種別を明示する:
-      - OpenAI (Codex): `git commit --author="Codex <noreply@openai.com>" -m "<message>"`
-      - Anthropic (Claude): `git commit --author="Claude <noreply@anthropic.com>" -m "<message>"`
-      - Cursor (Composer / Cloud Agent): `git commit --author="Cursor Agent <cursoragent@cursor.com>" -m "<message>"`
-   - author 名は実行環境のエージェント種別（Codex / Claude / Cursor Agent）を、email は各ベンダーのエージェント用アドレスを表す。実際に動作しているエージェント種別と一致する行を使用し、他エージェントの例を流用しない
-   - IF: 一部でもユーザーによる変更がある; THEN MUST: 通常の `git commit` を使用する。
-   - IF: Cursor Cloud Agent 環境で `commit-msg.cursor.co-author` hook により未承認の `Co-authored-by:` が自動付与される; THEN MUST: `cursor-hook-authoring` に従い `commit-msg.cursor.co-author-strip` 連鎖を install して除去する; NEVER: `git commit --no-verify` で Hook を迂回する（`git-guard` 等で deny される場合がある）
-   - IF: 履歴修正で force push が必要; THEN MUST: `GIT_GUARD_ALLOW_FORCE_PUSH=1` を一時設定して push し、作業後に unset する
-8. NEVER: `Co-Authored-By` を追加しない
-9. NEVER: `git add .` や `git add -A` を使用しない
-10. NEVER: 無関係な変更を1つのコミットに混在させない
+# commit-and-git
 
-## コミットメッセージのプレフィクス
-`feat`=新機能, `fix`=バグ修正, `perf`=性能改善, `refactor`=機能変更なしの改善, `docs`=ドキュメント, `style`=スタイル修正, `test`=テスト, `chore`=その他, `ci`=CI/CD設定, `build`=ビルド設定, `merge`=PR のマージ（マージコミット専用）
+このスキルは github スキルに統合しました。ここには規約を書いていません。
 
-# Git 操作
-1. MUST: あらゆる Git 操作（コミット、プッシュ、ブランチ作成、マージ、リベース）の前に `git fetch --prune` を実行する
-2. MUST: 現在のブランチがデフォルトブランチにマージ済みか確認する; IF: マージ済み; THEN: ユーザーに警告してブランチの切り替えを提案する
-3. MUST: リモートトラッキングブランチがまだ存在するか確認する; IF: 削除されている; THEN: ユーザーに警告する
-4. MUST: ローカルブランチがリモートより遅れていないか確認する; IF: 遅れている; THEN: `git pull --rebase` を提案する
-5. IF: ローカルブランチがリモートと乖離している; THEN SHOULD: ユーザーに警告し、リベースまたはマージを提案する
-6. MUST: GitHub CLI で PR を作成する場合は `gh pr create --body "<本文>"` または `gh pr create --body-file <file>` を使用し、PR 本文を明示する
-7. NEVER: コミットメッセージ、PR 本文、マージコミットメッセージに `Co-Authored-By` を含めない
-8. MUST: PR のマージ方式は merge commit を使用する
-9. MUST: PR をマージする場合は `gh pr merge <番号> --merge --subject "merge(scope): 説明（日本語、短い文）" --body ""` で件名と空の本文を明示する; NEVER: デフォルトのマージコミットメッセージ（`Merge pull request #N from ...`）を使用しない; NEVER: 件名・本文に PR 番号（`#N`）や Issue 番号など参照を含めない; NEVER: `merge` プレフィクスでマージであることが明示されるため、説明文に「マージ」と書かない（NG: `merge(api): foo をマージ` → OK: `merge(api): foo を追加`）
-10. NEVER: squash merge / squash commit を使用しない。ただしユーザーが明示的に指示した場合のみ例外とする
-11. NEVER: ユーザーの確認なしにブランチを切り替えない
-12. NEVER: ユーザーの承認なしに `git pull` や `git rebase` を実行しない
-13. NEVER: ユーザーの確認なしにローカルブランチを削除しない
+## すること
+
+1. github スキルを読み、その規約に従う。
+2. github スキルが見つからなければ、次のどちらかで読む。
+   - `npx skills add philtzjp/skills -g -a claude-code -a codex -a cursor -s github -s japanese -s turborepo -y` でホームに導入する。導入はユーザーの許可を得てから行う。
+   - https://raw.githubusercontent.com/philtzjp/skills/main/.agents/skills/github/SKILL.md を取得する。
+3. 作業中のリポジトリに、このスキルの古い規約本文がコピーされて残っていたら、github スキルを優先する。そのうえで、古いコピーの削除をユーザーに提案する。
+
+## 経緯
+
+philtzjp/skills の commit-and-git を改良した github スキルを正本にしました。refresh-skills で同期している各リポジトリが壊れないように、このスキルは削除もリネームもせず、案内として残しています。
