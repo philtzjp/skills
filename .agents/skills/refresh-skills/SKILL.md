@@ -80,7 +80,18 @@ DISABLE_TELEMETRY=1 npx skills add philtzjp/skills --list
    作業を始める前に、https://raw.githubusercontent.com/philtzjp/how-to-use-github/main/AGENTS.md を curl で取得して全文を読み、書かれている手順に従ってください。
    ```
 
-6. `scripts/refresh-skills.sh` や `.cursor/environment.json` のように、コピーの同期を前提にした仕組みがあれば、ユーザーに伝えて扱いを決める。リポジトリ固有のスキルが残るなら整合性検査に使えるが、上流との差分確認は不要になる。
+6. philtzjp/startingpoint 由来の `scripts/refresh-skills.sh` や `.cursor/environment.json` のように、コピーの同期を前提にした仕組みがあれば、`npx skills` に置き換えるようユーザーに提案する。
+
+   - `scripts/refresh-skills.sh`：上流との差分確認（`--upstream`）とコピーの同期をやめ、`npx skills update` でホームのスキルを更新する内容にする。リポジトリ固有のスキルが残るなら、シンボリックリンクとスキル表の突き合わせだけを残す。残らなければ、スクリプトごと削除する。
+   - `.cursor/environment.json` の `start`：Cursor Cloud Agent は起動のたびにホームが空になるので、`./scripts/refresh-skills.sh` の代わりに、起動時にスキルを導入する。
+
+     ```json
+     {
+       "start": "DISABLE_TELEMETRY=1 npx skills add philtzjp/skills -g -a cursor -s github -s japanese -s turborepo -y"
+     }
+     ```
+
+   - 他にも、CI、lefthook、セットアップ用のスクリプトなどでスキルのコピーや同期をしている箇所があれば、同じく `npx skills` に置き換える。
 
 ## スキルの正本とシンボリックリンクを突き合わせる
 
