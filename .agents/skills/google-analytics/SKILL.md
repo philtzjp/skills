@@ -1,10 +1,20 @@
 ---
 name: google-analytics
-description: Google Analytics の組み込み・同意管理（Consent Mode）・Cookie バナーまわりを実装/変更するときに参照する。`analytics_storage` を常に `granted` にする方針、広告関連シグナル (`ad_storage` / `ad_user_data` / `ad_personalization`) の既定値と「同意しない」選択時の更新ルールを定義する。
+description: Google Analytics の組み込み、同意管理（Consent Mode）、Cookie バナーまわりを実装・変更するときに参照する。このスキルは analytics スキルに統合した。内容は analytics スキルを使う。
 ---
 
-# Google Analytics
-1. MUST: Cookie の使用について確認し、同意を得た際に同意シグナルを送信する
-2. `analytics_storage` は MUST: 常に `granted` にする（基本的な分析は常に有効）
-3. `ad_storage`、`ad_user_data`、`ad_personalization` は SHOULD: デフォルトで `granted` にする
-4. IF: ユーザーが「同意しない」を選択; THEN MUST: 広告関連の値を `denied` に更新する
+# google-analytics
+
+このスキルは analytics スキルに統合しました。ここには規約を書いていません。
+
+## すること
+
+1. analytics スキルを読み、その規約に従う。
+2. analytics スキルが見つからなければ、次のどちらかで読む。
+   - `npx skills add philtzjp/skills -g -a claude-code -a codex -a cursor -s analytics -y` でホームに導入する。導入はユーザーの許可を得てから行う。
+   - https://raw.githubusercontent.com/philtzjp/skills/main/.agents/skills/analytics/SKILL.md を取得する。
+3. 作業中のリポジトリに、このスキルの古い規約本文がコピーされて残っていたら、analytics スキルを優先する。そのうえで、古いコピーの削除をユーザーに提案する。
+
+## 経緯
+
+philtzjp/skills の google-analytics を改良した analytics スキルを正本にしました。refresh-skills で同期している各リポジトリが壊れないように、このスキルは削除もリネームもせず、案内として残しています。
