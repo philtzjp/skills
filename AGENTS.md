@@ -22,6 +22,7 @@
 | `cursor-hook-authoring` | Cursor Cloud Agent 環境で Git hook 連鎖（commit-msg、Co-authored-by 付与・除去）を設計・実装・検証する時 |
 | `db` | データベースの選定・スキーマ定義・接続設定・マイグレーション・既存レコードの一括変換時 |
 | `hono` | Hono による HTTP API（OpenAPI スキーマ、エラー形式、ルーティング、認証方式、ヘルスチェック等）の設計・実装・変更時 |
+| `errorpage` | エラー応答（404 / 410 / 301 の使い分け、soft 404 の回避、HTML / Markdown / problem+json の出し分け、エラーページ）の設計・実装時 |
 | `analytics` | アクセス解析（Google Analytics と Consent Mode、Cookie バナー、Cloudflare Web Analytics 等）の実装・変更時 |
 | `e2etest` | ユーザー向け主要フロー / UI 変更 / フロー成功条件変更後の E2E テスト作成・実行時 |
 | `data-migration` | `db` に統合済み。`db` への案内のみ |
