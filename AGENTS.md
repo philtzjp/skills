@@ -13,13 +13,16 @@
 
 | skill | 発火タイミング |
 | --- | --- |
-| `issue-branch-pr-flow` | パッチバグフィクス以外の実装作業（Issue 起票・専用ブランチ作成・PR 作成・マージ前確認）時 |
-| `japanese-writing` | 日本語での応答・文章作成・編集・校正、コミットメッセージ・PR 説明・ドキュメント・UI 文言を書く時 |
-| `commit-and-git` | コミット・プッシュ・ブランチ作成/切替/削除・マージ・リベース時 |
+| `github` | Issue 起票・ブランチ作成・コミット・プッシュ・PR 作成・マージ・リベースなど Git / GitHub 操作時 |
+| `japanese` | 日本語での応答・文章作成・編集・校正、コミットメッセージ・PR 説明・ドキュメント・UI 文言を書く時 |
+| `turborepo` | 新規パッケージ追加・`turbo.json` / `pnpm-workspace.yaml` / `tsconfig` 編集・`apps/` や `packages/` の構成変更時 |
+| `issue-branch-pr-flow` | `github` に統合済み。`github` への案内のみ |
+| `japanese-writing` | `japanese` に統合済み。`japanese` への案内のみ |
+| `commit-and-git` | `github` に統合済み。`github` への案内のみ |
 | `cursor-hook-authoring` | Cursor Cloud Agent 環境で Git hook 連鎖（commit-msg、Co-authored-by 付与・除去）を設計・実装・検証する時 |
 | `data-migration` | データマイグレーション（一括変換・スキーマ移行）の設計・実行時 |
 | `api-design` | API エンドポイント（OpenAPI スキーマ、ルーティング、認証方式等）の追加・変更時 |
-| `typescript-monorepo` | 新規パッケージ追加・`turbo.json` / `pnpm-workspace.yaml` / `tsconfig` 編集時 |
+| `typescript-monorepo` | `turborepo` に統合済み。`turborepo` への案内のみ |
 | `google-analytics` | GA 連携・同意管理（Consent Mode）の実装・変更時 |
 | `e2e-testing` | ユーザー向け主要フロー / UI 変更 / フロー成功条件変更後の E2E テスト作成・実行時 |
 | `refresh-skills` | スキル追加・削除・リネーム時、`.claude/skills/` のシンボリックリンクや `AGENTS.md` / `CLAUDE.md` のスキル表の整合性確認・修復時、上流リポジトリからスキル定義を取り込み直す時 |
@@ -68,5 +71,4 @@ GitHub Issue 本体・Issue コメント・PR 本文・PR コメントを書く 
 - `refresh-skills`: スキル追加・削除・リネーム時の整合性検査・修復、上流からの取り込み手順
 - `skill-selection`: 上流リポジトリからのスキル選定と `AGENTS.md` / `CLAUDE.md` 更新
 - `skill-escalation`: スキル本体の改良提案を本リポジトリへ Issue として起票
-- `commit-and-git`: Git / GitHub 操作の規約
-- `issue-branch-pr-flow`: パッチ以外の実装作業の Issue / PR フロー
+- `github`: Git / GitHub 操作の規約と、パッチ以外の実装作業の Issue / PR フロー
