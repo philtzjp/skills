@@ -52,7 +52,7 @@ DISABLE_TELEMETRY=1 npx skills add philtzjp/skills --list
 DISABLE_TELEMETRY=1 npx skills add philtzjp/skills -g -a claude-code -a codex -a cursor -s <スキル名> -y
 ```
 
-refresh-skills、skill-selection、skill-escalation は、スキルそのものを扱う作業のときに読むスキルです。ホームに入れても、必要なときに philtzjp/skills から直接読んでもかまいません。
+refresh-skills、skill-selection、skill-escalation は導入しません。スキルの追加、削除、更新、移行は `npx skills` を直接使って行います。手順は https://raw.githubusercontent.com/philtzjp/how-to-use-github/main/AGENTS.md にあります。
 
 ## 入れないスキル
 
