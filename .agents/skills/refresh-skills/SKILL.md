@@ -55,7 +55,7 @@ description: スキルの追加・削除・リネーム時、`.claude/skills/` �
 2. MUST: `.claude/skills/<name>` を `../../.agents/skills/<name>` への相対シンボリックリンクとして作成する
 3. MUST: エージェント指示ファイルのスキル表に新しいスキル名と発火タイミングの行を追加する
 4. MUST: 「整合性検査」を実行する
-5. MUST: コミットは `commit-and-git` スキルに従って行う
+5. MUST: コミットは `github` スキルに従って行う
 
 ## スキル削除時の手順
 

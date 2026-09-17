@@ -51,4 +51,4 @@ description: 上流リポジトリ (`philtzjp/skills`) から自プロジェク�
 
 - `refresh-skills`: スキル追加・削除後の整合性検査と修復手順
 - `skill-escalation`: スキル本体の改良提案を上流に起票する手順
-- `commit-and-git`: 変更内容のコミット手順
+- `github`: 変更内容のコミット手順

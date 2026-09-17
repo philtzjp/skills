@@ -14,7 +14,7 @@ description: 既存スキルに従って作業しても期待通り進まない�
 ## ローカル改変
 
 1. MUST: スキル正本 `.agents/skills/<name>/SKILL.md` を直接編集する
-2. MUST: 編集内容が `commit-and-git` / `issue-branch-pr-flow` など他スキルと矛盾しないか確認する
+2. MUST: 編集内容が `github` など他スキルと矛盾しないか確認する
 3. MUST: 編集後は `refresh-skills` の整合性検査を実行し、`description` の意味（発火条件）が変わる場合は `AGENTS.md` / `CLAUDE.md` のスキル表も更新する
 4. NEVER: `.claude/skills/<name>/SKILL.md` の symlink 先以外を編集する（実体は `.agents/skills/<name>/SKILL.md`）
 
@@ -29,16 +29,16 @@ description: 既存スキルに従って作業しても期待通り進まない�
 1. MUST: `gh issue create --title "<title>" --body-file <file>` で起票する
 2. MUST: タイトルは `type(scope): 短い日本語` 形式を使用する
    - `type` は `feat` / `fix` / `perf` / `refactor` のいずれか
-   - `scope` は変更対象スキル名（例: `commit-and-git` / `refresh-skills` / `api-design`）
+   - `scope` は変更対象スキル名（例: `github` / `refresh-skills` / `api-design`）
 3. MUST: タイトルの説明は動作で終える（OK: `〜する` / `〜修正` / `〜追加` / `〜削除` / `〜実装` / `〜廃止` など）; NEVER: 体言止めにしない; NEVER: emoji を含めない; MUST: 1 行で完結させる
 4. MUST: Issue 本文の先頭は `AGENTS.md` / `CLAUDE.md` のベース署名規約（署名規約（Issue / PR / コメント））に従い、`✳︎ <会社名> <モデル名> <バージョン>` 形式の署名行を入れ、1 行空けて本文を続ける
 5. MUST: 本文には「背景」「作業範囲」「完了条件」「備考」セクションを設ける（後述のテンプレートを使用）
 
 ## タイトル例
 
-- `feat(commit-and-git): scope のドット込みディレクトリ表記ルールを明文化する`
+- `feat(github): scope のドット込みディレクトリ表記ルールを明文化する`
 - `fix(refresh-skills): symlink 検査スクリプトの誤検知を修正する`
-- `refactor(issue-branch-pr-flow): マージ前チェック手順を再編する`
+- `refactor(github): マージ前チェック手順を再編する`
 - `perf(api-design): OpenAPI 検証コマンドの実行時間を短縮する`
 
 ## 本文テンプレート
@@ -129,8 +129,7 @@ Cursor Cloud Agent が lefthook より後に `commit-msg.cursor.co-author` を�
 
 ## 関連スキル
 
-- `commit-and-git`: コミットメッセージ・PR 操作の規約
+- `github`: コミットメッセージ・PR 操作の規約と、パッチ以外の実装作業の Issue / PR フロー
 - `cursor-hook-authoring`: Cursor Cloud の commit-msg hook 連鎖と Co-authored-by 除去
-- `issue-branch-pr-flow`: パッチ以外の実装作業の Issue / PR フロー
 - `AGENTS.md` / `CLAUDE.md` のベース署名規約: Issue / PR 本文・コメントの署名形式
 - `refresh-skills`: スキル改変後の整合性検査

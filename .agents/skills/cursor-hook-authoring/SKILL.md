@@ -80,11 +80,11 @@ trap - EXIT
 
 1. MUST: `scripts/install-cursor-agent-hooks.sh` を実行する
 2. MUST: テストコミットを作成し、`git log -1 --format=%B` で `Co-authored-by:` / `Co-Authored-By:` が含まれないことを確認する
-3. MUST: `commit-and-git` スキルの `Co-Authored-By` 禁止ルールと矛盾しないことを確認する
+3. MUST: `github` スキルの `Co-Authored-By` 禁止ルールと矛盾しないことを確認する
 4. IF: lefthook を使用する; THEN MUST: `lefthook run commit-msg --commit-msg-file /tmp/test-msg` で strip を単体検証する
 
 ## 関連スキル
 
-- `commit-and-git`: コミット author 指定、`Co-Authored-By` 禁止、Hook 迂回禁止
+- `github`: コミット author 指定、`Co-Authored-By` 禁止、Hook 迂回禁止
 - `skill-escalation`: スキル改変の上流提案
 - `refresh-skills`: スキル追加時の整合性検査
