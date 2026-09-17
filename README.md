@@ -23,7 +23,19 @@ Philtz が AI エージェント（[Claude Code](https://docs.anthropic.com/en/d
 
 ## Usage
 
-各プロジェクトで本リポジトリのスキルを採用する場合は、`.agents/skills/<name>/SKILL.md` を取り込み、`.claude/skills/<name>` から `../../.agents/skills/<name>` への相対シンボリックリンクで参照する構造を作ってください。導入手順とスキル選定の詳細は `.agents/skills/skill-selection/SKILL.md` と `.agents/skills/refresh-skills/SKILL.md` を参照してください。
+Philtz のリポジトリで開発するときは、エージェントに次の文章を貼り付けてください。スキルの導入から作業前の確認まで、エージェントが [philtzjp/how-to-use-github](https://github.com/philtzjp/how-to-use-github) の手順に従って進めます。
+
+```text
+https://raw.githubusercontent.com/philtzjp/how-to-use-github/main/AGENTS.md を curl で取得して全文を読み、書かれている手順に従ってください。
+```
+
+スキルは各メンバーのホームに導入します。プロジェクトにはコピーしません。手動で導入する場合は次を実行してください。
+
+```sh
+DISABLE_TELEMETRY=1 npx skills add philtzjp/skills -g -a claude-code -a codex -a cursor -s github -s japanese -s turborepo -y
+```
+
+作業に応じて追加するスキルの選び方は `.agents/skills/skill-selection/SKILL.md` を、更新とプロジェクトに残ったコピーの移行は `.agents/skills/refresh-skills/SKILL.md` を参照してください。
 
 `AGENTS.md` は Codex CLI / GitHub Copilot / Cursor などが、`CLAUDE.md` は Claude Code がプロジェクトのコンテキストとして読み込む設定ファイルです。本リポジトリでは `CLAUDE.md` を `AGENTS.md` への symlink としています。
 
