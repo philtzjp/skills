@@ -1,38 +1,59 @@
 ---
 name: skill-escalation
-description: 既存スキルに従って作業しても期待通り進まないとき、Web 検索などで異なる情報・より新しい情報が得られたとき、スキルの条件分岐を厳守するとスタックや実装の自由度が制限され最良の結果が得られないと判断したときに参照する。`.agents/skills/<name>/SKILL.md` をローカルで改変する手順、および改変内容が有用と判断した場合に `philtzjp/skills` リポジトリへ変更提案 Issue を起票する手順とテンプレートを定義する。
+description: スキルの改良を正本リポジトリに提案する。スキルどおりに進まない、Web 検索などでスキルと違う情報や新しい情報が得られた、スキルの条件を厳守すると最良の結果が得られない、と判断したときの進め方を定義する。ホームに導入したスキルを直接編集しないこと、提案先の振り分け、Issue のタイトルと本文テンプレートを含む。スキルの内容に疑問を持ったとき、スキルの改良を提案するときに使う。
 ---
 
-# スキル改良とエスカレーション
+# skill-escalation
 
-## 発火タイミング
+## 使う場面
 
-1. 既存スキルに従って作業したが期待通り進まなかった
-2. Web 検索など外部情報源で、スキル記述と異なる／より新しい情報が得られた
-3. スキルの条件分岐を厳守するとスタックや実装の自由度が制限され、最良の結果が得られないと判断した
+- スキルに従って作業したが、期待どおりに進まなかった。
+- Web 検索などで、スキルと違う情報や、より新しい情報が得られた。
+- スキルの条件を厳守すると、技術選定や実装の自由度が狭まり、最良の結果が得られないと判断した。
 
-## ローカル改変
+## 目の前の作業の進め方
 
-1. MUST: スキル正本 `.agents/skills/<name>/SKILL.md` を直接編集する
-2. MUST: 編集内容が `github` など他スキルと矛盾しないか確認する
-3. MUST: 編集後は `refresh-skills` の整合性検査を実行し、`description` の意味（発火条件）が変わる場合は `AGENTS.md` / `CLAUDE.md` のスキル表も更新する
-4. NEVER: `.claude/skills/<name>/SKILL.md` の symlink 先以外を編集する（実体は `.agents/skills/<name>/SKILL.md`）
+スキルと違うやり方をとるなら、理由をユーザーに説明し、合意を得てから進めてください。黙ってスキルを無視しないでください。
 
-## エスカレーション判断
+ホームに導入したスキル（`~/.agents/skills/<スキル名>/SKILL.md`）は直接編集しないでください。
 
-1. MUST: ローカル改変が他ユーザー／他エージェントにも有用と判断した場合、`philtzjp/skills` リポジトリに変更提案 Issue を起票する
-2. SHOULD: 単発のワークアラウンドや、特定タスク固有の例外は Issue 化しない
-3. SHOULD: 既存 Issue / PR があれば、新規起票せずそこへコメント追記する
+- `npx skills update` で上書きされ、改変が消える。
+- そのメンバーの他のリポジトリの作業にも、改変が効いてしまう。
+- 他のメンバーには届かない。
 
-## Issue 起票
+改良は、正本のリポジトリに提案して反映します。
 
-1. MUST: `gh issue create --title "<title>" --body-file <file>` で起票する
-2. MUST: タイトルは `type(scope): 短い日本語` 形式を使用する
-   - `type` は `feat` / `fix` / `perf` / `refactor` のいずれか
-   - `scope` は変更対象スキル名（例: `github` / `refresh-skills` / `hono`）
-3. MUST: タイトルの説明は動作で終える（OK: `〜する` / `〜修正` / `〜追加` / `〜削除` / `〜実装` / `〜廃止` など）; NEVER: 体言止めにしない; NEVER: emoji を含めない; MUST: 1 行で完結させる
-4. MUST: Issue 本文の先頭は `AGENTS.md` / `CLAUDE.md` のベース署名規約（署名規約（Issue / PR / コメント））に従い、`✳︎ <会社名> <モデル名> <バージョン>` 形式の署名行を入れ、1 行空けて本文を続ける
-5. MUST: 本文には「背景」「作業範囲」「完了条件」「備考」セクションを設ける（後述のテンプレートを使用）
+## 提案するかどうか
+
+- 他のメンバーや他の作業にも役立つなら提案する。
+- その場限りの回避策や、特定の作業だけの例外なら提案しない。そのリポジトリ固有の事情なら、リポジトリの AGENTS.md に書くことをユーザーに提案する。
+- 同じ内容の Issue や PR が既にあれば、新しく起票せず、そこにコメントする。
+
+## 提案先
+
+| 変えたいもの | 提案先 |
+| --- | --- |
+| スキルの内容 | philtzjp/skills |
+| スキルの導入手順、エージェントが作業前に読む手順 | philtzjp/how-to-use-github |
+
+変更内容がはっきりしていてユーザーの許可があれば、Issue に加えて PR を作ってもかまいません。PR は github スキルの手順で作ります。
+
+統合済みの旧スキル（commit-and-git、issue-branch-pr-flow など）に向けた提案はしないでください。統合先のスキルに向けて提案します。
+
+## Issue の起票
+
+```sh
+gh issue create --repo philtzjp/skills --title "<タイトル>" --body-file <ファイル>
+```
+
+タイトルは `type(scope): 短い日本語` の形式にします。
+
+- type は feat、fix、perf、refactor のいずれか。
+- scope は変更対象のスキル名。例：github、refresh-skills、hono。
+- 説明は動作で終える。〜する、〜修正、〜追加、〜削除、〜実装、〜廃止など。体言止めにしない。
+- emoji を含めない。1 行で完結させる。
+
+本文の先頭には、philtzjp/skills の AGENTS.md の署名規約に従って `✳︎ <会社名> <モデル名> <バージョン>` の署名行を入れ、1 行空けて本文を続けます。本文には「背景」「作業範囲」「完了条件」「備考」の節を設けます。
 
 ## タイトル例
 
@@ -120,6 +141,8 @@ assignees: ""
 
 ## 改変記録の例（cursor-hook-authoring / commit-and-git）
 
+スキルを各リポジトリにコピーしていたころの記録です。今はホームのスキルを直接編集せず、正本に提案します。
+
 Cursor Cloud Agent が lefthook より後に `commit-msg.cursor.co-author` を実行し `Co-authored-by:` を付与する事象に対し、asna リポジトリで strip 連鎖 Hook を実装した。ローカル改変内容:
 
 - `commit-and-git`: `--no-verify` 回避策を削除し、strip 連鎖への委譲と `GIT_GUARD_ALLOW_FORCE_PUSH` を明記
@@ -132,4 +155,5 @@ Cursor Cloud Agent が lefthook より後に `commit-msg.cursor.co-author` を�
 - `github`: コミットメッセージ・PR 操作の規約と、パッチ以外の実装作業の Issue / PR フロー
 - `cursor-hook-authoring`: Cursor Cloud の commit-msg hook 連鎖と Co-authored-by 除去
 - `AGENTS.md` / `CLAUDE.md` のベース署名規約: Issue / PR 本文・コメントの署名形式
-- `refresh-skills`: スキル改変後の整合性検査
+- `refresh-skills`: スキルの更新と、リポジトリに残ったコピーの移行
+- `skill-selection`: 導入するスキルの選び方
