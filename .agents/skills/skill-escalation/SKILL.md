@@ -29,7 +29,7 @@ description: 既存スキルに従って作業しても期待通り進まない�
 1. MUST: `gh issue create --title "<title>" --body-file <file>` で起票する
 2. MUST: タイトルは `type(scope): 短い日本語` 形式を使用する
    - `type` は `feat` / `fix` / `perf` / `refactor` のいずれか
-   - `scope` は変更対象スキル名（例: `github` / `refresh-skills` / `api-design`）
+   - `scope` は変更対象スキル名（例: `github` / `refresh-skills` / `hono`）
 3. MUST: タイトルの説明は動作で終える（OK: `〜する` / `〜修正` / `〜追加` / `〜削除` / `〜実装` / `〜廃止` など）; NEVER: 体言止めにしない; NEVER: emoji を含めない; MUST: 1 行で完結させる
 4. MUST: Issue 本文の先頭は `AGENTS.md` / `CLAUDE.md` のベース署名規約（署名規約（Issue / PR / コメント））に従い、`✳︎ <会社名> <モデル名> <バージョン>` 形式の署名行を入れ、1 行空けて本文を続ける
 5. MUST: 本文には「背景」「作業範囲」「完了条件」「備考」セクションを設ける（後述のテンプレートを使用）
@@ -39,7 +39,7 @@ description: 既存スキルに従って作業しても期待通り進まない�
 - `feat(github): scope のドット込みディレクトリ表記ルールを明文化する`
 - `fix(refresh-skills): symlink 検査スクリプトの誤検知を修正する`
 - `refactor(github): マージ前チェック手順を再編する`
-- `perf(api-design): OpenAPI 検証コマンドの実行時間を短縮する`
+- `perf(hono): OpenAPI 検証コマンドの実行時間を短縮する`
 
 ## 本文テンプレート
 
