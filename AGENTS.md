@@ -5,7 +5,7 @@
 
 # このリポジトリについて
 
-本リポジトリ `philtzjp/skills` は、Philtz が AI エージェント（Claude Code、Codex CLI、GitHub Copilot、Cursor 等）に与える場面依存スキルを集約した正本リポジトリです。各スキルは特定状況下で守るべき `MUST` / `NEVER` を定義します。スキルは各メンバーのホームに `npx skills add philtzjp/skills -g ...` で導入し、各プロジェクトにはコピーしません。導入手順は [philtzjp/how-to-use-github](https://github.com/philtzjp/how-to-use-github) の `AGENTS.md` にあります。
+本リポジトリ `philtzjp/skills` は、Philtz が AI エージェント（Claude Code、Codex CLI、GitHub Copilot、Cursor 等）に与える場面依存スキルを集約した正本リポジトリです。各スキルは特定状況下で守るべき `MUST` / `NEVER` を定義します。スキルは各メンバーのホームに `npx skills add philtzjp/skills -g ...` で導入し、各プロジェクトにはコピーしません。導入手順は [philtzjp/startingpoint](https://github.com/philtzjp/startingpoint) の `START.md` にあります。
 
 # スキル
 

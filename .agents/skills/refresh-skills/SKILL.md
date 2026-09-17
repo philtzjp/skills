@@ -9,7 +9,7 @@ description: スキルを最新にする、作業対象リポジトリに残っ�
 
 philtzjp/skills のスキルは、各メンバーのホームに `npx skills` で導入します。作業対象リポジトリにはコピーしません。コピーした時点から古くなり、上流の更新が届かなくなるためです。
 
-作業の入口は https://raw.githubusercontent.com/philtzjp/how-to-use-github/main/AGENTS.md です。導入するスキルの選び方は skill-selection に従ってください。
+作業の入口は https://raw.githubusercontent.com/philtzjp/startingpoint/main/START.md です。導入するスキルの選び方は skill-selection に従ってください。
 
 以前は各リポジトリの `.agents/skills/` にスキルをコピーし、上流と同期していました。この手順はもう使いません。
 
@@ -72,12 +72,12 @@ DISABLE_TELEMETRY=1 npx skills add philtzjp/skills --list
 2. 削除するスキルの `.agents/skills/<スキル名>/` と `.claude/skills/<スキル名>` を削除する。
 3. AGENTS.md や CLAUDE.md のスキル表から、削除したスキルの行を消す。リポジトリ固有のスキルが残らなければ、スキル表ごと消す。
 4. AGENTS.md や CLAUDE.md の中で、削除したスキルを前提にした記述（「philtzjp/skills から取り込む」「refresh-skills で同期する」など）を消す。
-5. AGENTS.md に、how-to-use-github を読む案内を入れる。
+5. AGENTS.md に、philtzjp/startingpoint の START.md を読む案内を入れる。
 
    ```markdown
    ## 開発ルール
 
-   作業を始める前に、https://raw.githubusercontent.com/philtzjp/how-to-use-github/main/AGENTS.md を curl で取得して全文を読み、書かれている手順に従ってください。
+   作業を始める前に、https://raw.githubusercontent.com/philtzjp/startingpoint/main/START.md を curl で取得して全文を読み、書かれている手順に従ってください。
    ```
 
 6. philtzjp/startingpoint 由来の `scripts/refresh-skills.sh` や `.cursor/environment.json` のように、コピーの同期を前提にした仕組みがあれば、`npx skills` に置き換えるようユーザーに提案する。

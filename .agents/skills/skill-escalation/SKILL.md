@@ -34,7 +34,7 @@ description: スキルの改良を正本リポジトリに提案する。スキ�
 | 変えたいもの | 提案先 |
 | --- | --- |
 | スキルの内容 | philtzjp/skills |
-| スキルの導入手順、エージェントが作業前に読む手順 | philtzjp/how-to-use-github |
+| スキルの導入手順、エージェントが作業前に読む手順（START.md） | philtzjp/startingpoint |
 
 変更内容がはっきりしていてユーザーの許可があれば、Issue に加えて PR を作ってもかまいません。PR は github スキルの手順で作ります。
 

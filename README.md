@@ -23,10 +23,10 @@ Philtz が AI エージェント（[Claude Code](https://docs.anthropic.com/en/d
 
 ## Usage
 
-Philtz のリポジトリで開発するときは、エージェントに次の文章を貼り付けてください。スキルの導入から作業前の確認まで、エージェントが [philtzjp/how-to-use-github](https://github.com/philtzjp/how-to-use-github) の手順に従って進めます。
+Philtz のリポジトリで開発するときは、エージェントに次の文章を貼り付けてください。スキルの導入から作業前の確認まで、エージェントが [philtzjp/startingpoint](https://github.com/philtzjp/startingpoint) の `START.md` に従って進めます。
 
 ```text
-https://raw.githubusercontent.com/philtzjp/how-to-use-github/main/AGENTS.md を curl で取得して全文を読み、書かれている手順に従ってください。
+https://raw.githubusercontent.com/philtzjp/startingpoint/main/START.md を curl で取得して全文を読み、書かれている手順に従ってください。
 ```
 
 スキルは各メンバーのホームに導入します。プロジェクトにはコピーしません。手動で導入する場合は次を実行してください。
