@@ -20,11 +20,16 @@
 | `japanese-writing` | `japanese` に統合済み。`japanese` への案内のみ |
 | `commit-and-git` | `github` に統合済み。`github` への案内のみ |
 | `cursor-hook-authoring` | Cursor Cloud Agent 環境で Git hook 連鎖（commit-msg、Co-authored-by 付与・除去）を設計・実装・検証する時 |
-| `data-migration` | データマイグレーション（一括変換・スキーマ移行）の設計・実行時 |
-| `api-design` | API エンドポイント（OpenAPI スキーマ、ルーティング、認証方式等）の追加・変更時 |
+| `db` | データベースの選定・スキーマ定義・接続設定・マイグレーション・既存レコードの一括変換時 |
+| `hono` | Hono による HTTP API（OpenAPI スキーマ、エラー形式、ルーティング、認証方式、ヘルスチェック等）の設計・実装・変更時 |
+| `errorpage` | エラー応答（404 / 410 / 301 の使い分け、soft 404 の回避、HTML / Markdown / problem+json の出し分け、エラーページ）の設計・実装時 |
+| `analytics` | アクセス解析（Google Analytics と Consent Mode、Cookie バナー、Cloudflare Web Analytics 等）の実装・変更時 |
+| `e2etest` | ユーザー向け主要フロー / UI 変更 / フロー成功条件変更後の E2E テスト作成・実行時 |
+| `data-migration` | `db` に統合済み。`db` への案内のみ |
+| `api-design` | `hono` に統合済み。`hono` への案内のみ |
 | `typescript-monorepo` | `turborepo` に統合済み。`turborepo` への案内のみ |
-| `google-analytics` | GA 連携・同意管理（Consent Mode）の実装・変更時 |
-| `e2e-testing` | ユーザー向け主要フロー / UI 変更 / フロー成功条件変更後の E2E テスト作成・実行時 |
+| `google-analytics` | `analytics` に統合済み。`analytics` への案内のみ |
+| `e2e-testing` | `e2etest` に統合済み。`e2etest` への案内のみ |
 | `refresh-skills` | スキル追加・削除・リネーム時、`.claude/skills/` のシンボリックリンクや `AGENTS.md` / `CLAUDE.md` のスキル表の整合性確認・修復時、上流リポジトリからスキル定義を取り込み直す時 |
 | `skill-escalation` | 既存スキル通りに進まない時、Web 検索で異なる情報が得られた時、条件分岐の厳守がスタックの自由度を制限する時にスキル本体をローカルで改変し、有用な変更を `philtzjp/skills` の Issue として起票する時 |
 | `skill-selection` | 上流リポジトリからスキル群を初期導入する時、新規スキルを採用するか判断する時、不要になったスキルを除外する時、`AGENTS.md` / `CLAUDE.md` のスキル表や記述を採用構成に合わせて書き換える時 |

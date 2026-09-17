@@ -1,13 +1,20 @@
 ---
 name: e2e-testing
-description: 新しいユーザー向け主要フロー、重要な UI 変更、既存フローの成功条件を変更したときに参照する。E2E テストの作成・実行、agent-browser をメインに据えた使い分け、Playwright へのフォールバック条件、タイミング依存テスト (`sleep`) の禁止を定義する。
+description: 新しいユーザー向け主要フロー、重要な UI 変更、既存フローの成功条件を変更したときに参照する。このスキルは e2etest スキルに統合した。内容は e2etest スキルを使う。
 ---
 
-# テスト責務
-1. IF: 新しいユーザー向け主要フロー、重要な UI 変更、または既存フローの成功条件を変更した; THEN MUST: E2E テストを作成・実行する
-2. MUST: E2E テストのメインツールとして agent-browser を使用する; agent-browser では対応できないインタラクション（キャンバス操作、細かいマウス操作、タッチジェスチャー、ネットワーク傍受、複数ページ/クロスオリジンフロー、WebSocket/SSE アサーション）に限り Playwright にフォールバックする
-3. IF: Playwright にフォールバックする; THEN MUST: agent-browser では対応できなかった理由をテストファイルに記載する
-4. MUST NOT: 純粋なバックエンド/API の変更、ドキュメントのみの変更、設定/依存関係の更新、動作変更を伴わないリファクタリングに対してはトリガーしない
-5. IF: 既存管理画面への小規模な設定項目追加で主要フローの成功条件を変更しない; THEN SHOULD: agent-browser で手動検証し、リスクがある場合のみ E2E テストを作成・実行する
-6. NEVER: agent-browser で対応できるインタラクションに Playwright を使用しない
-7. NEVER: タイミングに依存するテスト（`sleep`）を作成しない — MUST: 明示的な待機条件を使用する
+# e2e-testing
+
+このスキルは e2etest スキルに統合しました。ここには規約を書いていません。
+
+## すること
+
+1. e2etest スキルを読み、その規約に従う。
+2. e2etest スキルが見つからなければ、次のどちらかで読む。
+   - `npx skills add philtzjp/skills -g -a claude-code -a codex -a cursor -s e2etest -y` でホームに導入する。導入はユーザーの許可を得てから行う。
+   - https://raw.githubusercontent.com/philtzjp/skills/main/.agents/skills/e2etest/SKILL.md を取得する。
+3. 作業中のリポジトリに、このスキルの古い規約本文がコピーされて残っていたら、e2etest スキルを優先する。そのうえで、古いコピーの削除をユーザーに提案する。
+
+## 経緯
+
+philtzjp/skills の e2e-testing を改良した e2etest スキルを正本にしました。refresh-skills で同期している各リポジトリが壊れないように、このスキルは削除もリネームもせず、案内として残しています。
