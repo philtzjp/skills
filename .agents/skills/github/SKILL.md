@@ -1,6 +1,6 @@
 ---
 name: github
-description: Issue 起票からブランチ、実装、PR、マージまでの標準フローと、Git / GitHub 操作の規約。コミットメッセージの type(scope) 形式、scope の決め方、--author の扱い、Co-Authored-By と git add . の禁止、merge commit での PR マージ、ahead/behind の確認。コミット、プッシュ、ブランチ作成や切り替え、マージ、リベース、Issue や PR の作成、gh pr merge を行うときに使う。
+description: Issue 起票からブランチ、実装、PR、マージまでの標準フローと、Git / GitHub 操作の規約。コミットメッセージの type(scope) 形式、scope の決め方、--author の扱い、Co-Authored-By と git add . の禁止、merge ラベルによる philtz-organizer-bot の squash マージ、ahead/behind の確認。コミット、プッシュ、ブランチ作成や切り替え、マージ、リベース、Issue や PR の作成を行うときに使う。
 ---
 
 # github
@@ -14,7 +14,7 @@ description: Issue 起票からブランチ、実装、PR、マージまでの�
 3. 実装する。
 4. PR を作る。
 5. ahead / behind とマージ可否を確認する。
-6. merge commit でマージする。
+6. `merge` ラベルを付け、philtz-organizer-bot に squash でマージさせる。
 
 判断に迷う作業はパッチバグフィクスではなく通常フローとして扱う。通常フロー対象の実装を、Issue なし、専用ブランチなし、PR なしで進めない。デフォルトブランチ上で始めない。
 
@@ -22,7 +22,7 @@ description: Issue 起票からブランチ、実装、PR、マージまでの�
 
 ## フローを省略できる場合
 
-次をすべて満たすときだけ、パッチバグフィクスとして省略できる。
+次をすべて満たすときだけ、パッチバグフィクスとして Issue の起票を省略できる。ブランチと PR は省略できない。デフォルトブランチには直接 push できないため。
 
 - 既存挙動の明確な不具合を直す最小差分である。
 - 仕様追加、設計変更、データモデル変更、API 契約変更、依存関係変更、権限・課金・認証の変更を含まない。
@@ -45,7 +45,9 @@ git fetch --prune
 ## Issue
 
 - 既存 Issue があるか先に確認する。なければ実装前に作る。
-- 目的、背景、受け入れ条件、影響範囲、検証方針を書く。
+- タイトルと本文は `.github/conventions.yml` に従う。本文は署名の行から始め、見出しを背景、作業範囲、受け入れ条件の順に書く。必要なら最後に備考を足す。
+- 背景は最初の行から箇条書きにする。影響範囲や検証方針は、作業範囲か備考に書く。
+- philtz-organizer-bot が Issue の書式を検査し、違反があれば内容をコメントにまとめるので、直す。
 - 受け入れ条件は task list（`- [ ]`）で書き、達成状況を追跡できるようにする。
 - 複数会社や複数領域に影響するなら、担当境界とレビュー観点を書く。
 - 実装単位が大きすぎない粒度に分割する。
@@ -75,7 +77,7 @@ type は次のいずれか。
 
 - feat 新機能 / fix バグ修正 / perf 性能改善 / refactor 機能変更なしの改善
 - docs ドキュメント / style スタイル修正 / test テスト / chore その他
-- ci CI/CD 設定 / build ビルド設定 / merge PR のマージ（マージコミット専用）
+- ci CI/CD 設定 / build ビルド設定 / merge PR のマージ（philtz-organizer-bot が作る squash のコミット専用。人とエージェントは使わない）
 
 scope の決め方。
 
@@ -104,7 +106,7 @@ OK: feat(repo): / feat(.agents): / feat(.claude): / feat(dashboard): / feat(log)
 - ファイルごとに `git diff` を実行し、各変更の作者を確認する。
 - `git add .` と `git add -A` を使わない。
 - committer を上書きしない。常にユーザーの git config を使う。
-- `Co-Authored-By` を、コミットメッセージ、PR 本文、マージコミットメッセージのいずれにも含めない。
+- `Co-Authored-By` を、コミットメッセージと PR 本文のどちらにも含めない。
 
 すべての変更がエージェントによるもので、ユーザーが編集した行がない場合だけ、`--author` で自身のエージェント種別を明示する。
 
@@ -118,6 +120,7 @@ git commit --author="Cursor Agent <cursoragent@cursor.com>" -m "<message>"
 
 - commit-msg hook が未承認の `Co-authored-by:` を自動付与する環境では、それを除去する hook を入れて対処する。`git commit --no-verify` で hook を迂回しない。
 - 履歴修正で force push が必要なら、guard の許可を一時的に有効にして push し、作業後に戻す。
+- PR の途中のコミットは squash されて main に残らない。途中のコミットのメッセージを直すためだけに、履歴を書き換えて force push しない。
 
 ## Git 操作の安全確認
 
@@ -138,9 +141,12 @@ gh pr create --body-file <file>
 ```
 
 - 本文を必ず明示する。`--fill` やエディタ生成で `Co-Authored-By` が混入し得る場合は使わない。
-- 本文に概要、変更内容、検証結果、影響範囲、レビューしてほしい観点、残リスクを書く。
-- 対象 Issue を自然言語で参照する。本文の背景や概要に `#<issue-number>` を書く。
-- 自動クローズが必要な場合だけ、英語キーワード（`Closes #N` など）を使うか、GitHub の Development で Issue をリンクする。日本語の同義表現（「#N をクローズする」）では自動クローズは発火しない。
+- タイトルと本文は、philtzjp/pulumi の `.github/conventions.yml` に従う。リポジトリに同じ名前のファイルがあれば、そちらに従う。
+- タイトルは `type(scope): 説明` にする。説明はそのまま main のコミットの件名になる。
+- 本文は署名の行から始め、見出しを背景、作業範囲、受け入れ条件、影響範囲・残リスクの順に書く。必要なら最後に備考を足す。
+- 対象 Issue を自然言語で参照する。本文の背景に `#<issue-number>` を書く。
+- `Closes #N` などの自動クローズのキーワードを使わない。Issue はマージ後に手で閉じる。
+- philtz-organizer-bot が PR を開いたとき、編集したとき、push したときに書式を検査し、`organizer-bot/conventions` のステータスを付ける。違反があれば内容をコメントにまとめるので、直す。
 - 作成前にローカルブランチを upstream へ push する。
 - Draft で早めに作り、実装完了後に Ready for review へ切り替える。
 - レビュー、CI、必要な検証を迂回してマージしない。
@@ -155,6 +161,7 @@ git status --short --branch
 - ローカルブランチが upstream に対して ahead / behind / diverged していないこと。
 - PR ブランチがベースブランチに対して behind していないこと。
 - PR が mergeable で、コンフリクトがなく、必須の CI、レビュー、チェックが通っていること。
+- `organizer-bot/conventions` のステータスが成功していること。
 
 対処。
 
@@ -165,21 +172,32 @@ git status --short --branch
 
 ## マージ
 
-直前にもう一度 `git fetch --prune` と ahead / behind の確認を行う。
+人とエージェントはマージしない。デフォルトブランチには誰も直接 push できず、画面のマージボタンも使えない。マージは philtz-organizer-bot だけが行う。
+
+直前にもう一度 `git fetch --prune` と ahead / behind の確認を行い、PR に `merge` ラベルを付ける。
 
 ```sh
-gh pr merge <番号> --merge --subject "merge(scope): 説明" --body ""
+gh pr edit <番号> --add-label merge
 ```
 
-- マージ方式は merge commit。squash merge と squash commit は使わない。ユーザーが明示的に指示した場合だけ例外。
-- 件名と空の本文を明示する。デフォルトのマージコミットメッセージ（`Merge pull request #N from ...`）を使わない。
-- 件名にも本文にも PR 番号や Issue 番号（`#N`）を含めない。
-- merge プレフィクスでマージであることは明示されるので、説明文に「マージ」と書かない。`merge(api): foo をマージ` ではなく `merge(api): foo を追加`。
+philtz-organizer-bot は、次をすべて満たすときだけ squash でマージする。
+
+- PR が開いていて、Draft でない。
+- タイトルと本文が規約に合っている。
+- ブランチがデフォルトブランチに追いついている。
+- 必須の検査が通り、ruleset が求める承認がある。ラベルを付けたのが org の owner なら、承認は確かめない。
+
+main に残るのは 1 PR につき 1 つのコミットで、件名は `merge(scope): 説明` になる。説明は PR のタイトルから取り、scope は変更したファイルから bot が決める。本文は付かない。author は PR を出した人、committer は philtz-organizer-bot で、`(#N)` と `Co-authored-by` は付かない。
+
+- `gh pr merge` を使わない。
+- merge プレフィクスでマージであることは明示されるので、PR のタイトルの説明に「マージ」と書かない。`feat(api): foo をマージ` ではなく `feat(api): foo を追加`。
+- 条件を満たさなければ、bot が理由をコメントしてラベルを外す。直してからラベルを付け直す。
+- ラベルを付けて 1 分たってもマージもコメントもされなければ、ラベルを外して付け直す。
 
 ## マージ後
 
-- 対象 Issue の状態を確認する。自動クローズを設定していたならクローズされたことを確認する。設定していなければ `gh issue close <番号>` で手動クローズする。
-- 作業ブランチの削除は、リモート状態とユーザーの意図を確認してから行う。
+- 対象 Issue は自動では閉じないので、`gh issue close <番号>` で閉じる。
+- リモートの作業ブランチはマージで自動的に消える。ローカルのブランチは、ユーザーの意図を確認してから消す。
 - マージ、レビュー、検証を保留する場合や解決が pending の場合は、Issue をクローズせず、保留（pending review）として状況と再開条件をコメントに残す。重複起票を防ぐため。
 - 未解決の同一事象について Issue を重複起票しない。
 - 同一事象で複数の Issue が起票・クローズされていたら、最古の Issue を親（正本）として sub-issue 関係を付け、後発を duplicate としてクローズし、変更内容を各 Issue にコメントする。
