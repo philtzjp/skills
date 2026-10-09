@@ -16,6 +16,7 @@
 | `github` | Issue 起票・ブランチ作成・コミット・プッシュ・PR 作成・マージ・リベースなど Git / GitHub 操作時 |
 | `japanese` | 日本語での応答・文章作成・編集・校正、コミットメッセージ・PR 説明・ドキュメント・UI 文言を書く時 |
 | `turborepo` | 新規パッケージ追加・`turbo.json` / `pnpm-workspace.yaml` / `tsconfig` 編集・`apps/` や `packages/` の構成変更時 |
+| `conventions` | git の commit-msg hook から呼ぶ書式の検査器。hook が検査器がないと止めた時、検査の結果を確かめる時。中身は philtz-organizer-bot が philtzjp/pulumi から写すので、直接編集しない |
 | `issue-branch-pr-flow` | `github` に統合済み。`github` への案内のみ |
 | `japanese-writing` | `japanese` に統合済み。`japanese` への案内のみ |
 | `commit-and-git` | `github` に統合済み。`github` への案内のみ |
