@@ -11,7 +11,7 @@ description: 日本語で文章を書く、直す、レビューするとき、�
 
 1. japanese スキルを読み、その規約に従う。
 2. japanese スキルが見つからなければ、次のどちらかで読む。
-   - `npx skills add philtzjp/skills -g -a claude-code -a codex -a cursor -s github -s japanese -s turborepo -y` でホームに導入する。導入はユーザーの許可を得てから行う。
+   - `DISABLE_TELEMETRY=1 pnpm dlx skills add philtzjp/skills -a claude-code -a codex -a cursor -s github -s japanese -s turborepo -y` をリポジトリの直下で実行して入れる。導入はユーザーの許可を得てから行う。
    - https://raw.githubusercontent.com/philtzjp/skills/main/.agents/skills/japanese/SKILL.md を取得する。
 3. 作業中のリポジトリに、このスキルの古い規約本文がコピーされて残っていたら、japanese スキルを優先する。そのうえで、古いコピーの削除をユーザーに提案する。
 

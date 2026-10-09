@@ -29,10 +29,10 @@ Philtz のリポジトリで開発するときは、エージェントに次の�
 https://raw.githubusercontent.com/philtzjp/startingpoint/main/START.md を curl で取得して全文を読み、書かれている手順に従ってください。
 ```
 
-スキルは各メンバーのホームに導入します。プロジェクトにはコピーしません。手動で導入する場合は次を実行してください。
+スキルは作業するリポジトリごとに入れ、コミットしません。入れたスキルの `.agents/skills/`、`.claude/skills/`、`skills-lock.json` は gitignore に入れます。手動で入れる場合は、リポジトリの直下で次を実行してください。
 
 ```sh
-DISABLE_TELEMETRY=1 npx skills add philtzjp/skills -g -a claude-code -a codex -a cursor -s github -s japanese -s turborepo -y
+DISABLE_TELEMETRY=1 pnpm dlx skills add philtzjp/skills -a claude-code -a codex -a cursor -s github -s japanese -s turborepo -y
 ```
 
 作業に応じて追加するスキルの選び方は `.agents/skills/skill-selection/SKILL.md` を、更新とプロジェクトに残ったコピーの移行は `.agents/skills/refresh-skills/SKILL.md` を参照してください。
