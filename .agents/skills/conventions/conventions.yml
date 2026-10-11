@@ -1,6 +1,7 @@
-# Issue、PR、コミットメッセージ、tag の書式の規約。
-# 手元の commit-msg hook と Actions の conventions workflow が、どちらもこのファイルを読む。
-# 規約の出典は philtzjp/skills の github スキルと、このリポジトリの .github のテンプレート。
+# Issue、PR、コミットメッセージ、tag の書式の組織の規約の正本。
+# 自分の .github/conventions.yml を持たないリポジトリは、すべてこのファイルに従う。
+# 読むのは philtz-organizer-bot、各リポジトリの commit-msg hook が呼ぶ conventions スキル、Actions の conventions workflow。
+# 検査器は philtzjp/organizer-bot の packages/conventions にある。規約の出典は philtzjp/skills の github スキルと、このリポジトリの .github のテンプレート。
 
 commit:
     types: [feat, fix, perf, refactor, docs, style, test, chore, ci, build]

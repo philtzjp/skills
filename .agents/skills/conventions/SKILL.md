@@ -1,13 +1,13 @@
 ---
 name: conventions
-description: git の commit-msg hook から呼ぶ、コミットメッセージの書式の検査器。規約の正本は philtzjp/pulumi の .github/conventions.yml。hook が「書式の検査器がありません」と止めたとき、検査の結果に納得できないとき、hook を設定するときに使う。書式そのものの書き方は github スキルに従う。
+description: git の commit-msg hook から呼ぶ、コミットメッセージの書式の検査器。規約の正本は philtzjp/.github の conventions.yml。hook が「書式の検査器がありません」と止めたとき、検査の結果に納得できないとき、hook を設定するときに使う。書式そのものの書き方は github スキルに従う。
 ---
 
 # conventions
 
 コミットメッセージを、Philtz の規約で検査する CLI です。各リポジトリの `.vite-hooks/commit-msg` が呼びます。
 
-このスキルの中身は、philtzjp/pulumi の `packages/conventions` と `.github/conventions.yml` から philtz-organizer-bot が写しています。ここを直接編集しないでください。次に写したときに上書きされます。
+このスキルの中身は、philtzjp/organizer-bot の `packages/conventions` と、philtzjp/.github の `conventions.yml` から philtz-organizer-bot が写しています。ここを直接編集しないでください。次に写したときに上書きされます。
 
 ## 中身
 
@@ -32,4 +32,4 @@ exec node "$cli" commit-msg "$1"
 
 - 出たメッセージに従ってコミットメッセージを直す。書き方は github スキルに従う。
 - `--no-verify` で hook を迂回しない。
-- 規約がおかしいと思ったら、philtzjp/pulumi の `.github/conventions.yml` を直す Issue を起票する。このスキルや hook に規則を書き足さない。
+- 規約がおかしいと思ったら、philtzjp/.github の `conventions.yml` を直す Issue を起票する。このスキルや hook に規則を書き足さない。

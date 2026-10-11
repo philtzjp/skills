@@ -1,4 +1,4 @@
-// philtzjp/pulumi の packages/conventions を pnpm run build でまとめたもの。直接編集しない
+// philtzjp/organizer-bot の packages/conventions を pnpm run build でまとめたもの。直接編集しない
 import { createRequire } from "node:module"
 const require = createRequire(import.meta.url)
 var __create = Object.create;
