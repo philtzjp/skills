@@ -7554,6 +7554,23 @@ var checkPullRequest = (conventions2, title, body) => {
   return errors;
 };
 var checkTag = (conventions2, name) => new RegExp(conventions2.tag.pattern, "u").test(name) ? [] : [`tag \u306F v \u3092\u4ED8\u3051\u305F semver \u306B\u3059\u308B\u3002\u4F8B: ${conventions2.tag.example}: ${name}`];
+var semanticLintPrompt = (message) => {
+  const subject = message.split("\n")[0] ?? "";
+  const description = subject.match(/^[a-z]+(\([^)]*\))?: (.+)$/)?.[2] ?? subject;
+  return [
+    "You are a strict commit message linter. Respond with ONLY 'PASS' or 'FAIL: reason in Japanese'.",
+    "",
+    "You receive only the description part of a commit subject. The type and scope were already checked by other rules, so do not judge them, and do not mention them in your reason.",
+    "",
+    "Rules:",
+    "- The description MUST clearly describe a specific change (what was changed and/or why)",
+    "- FAIL if the description is meaningless, nonsensical, placeholder-like, or does not describe an actual change",
+    "- FAIL examples: 'a', 'test', 'update', 'changes', 'main \u306E\u5909\u66F4\u3092\u53D6\u308A\u8FBC\u3080'",
+    "- PASS examples: '\u30C1\u30FC\u30E0\u306E\u89AA\u3092\u5BA3\u8A00\u306E\u9806\u306B\u4F5C\u308B', '\u547D\u540D\u898F\u5247\u3092\u8FFD\u52A0\u3059\u308B', 'Environment \u3092\u6D88\u3059\u6E96\u5099\u3068\u3057\u3066 protect \u3092\u5916\u305B\u308B\u3088\u3046\u306B\u3059\u308B'",
+    "",
+    `Description: ${description}`
+  ].join("\n");
+};
 
 // src/cli.ts
 var conventions_path = process.env.CONVENTIONS_PATH ?? (existsSync(".github/conventions.yml") ? ".github/conventions.yml" : fileURLToPath(new URL("conventions.yml", import.meta.url)));
@@ -7574,18 +7591,7 @@ var lintSemantically = (message) => {
   if (!rules.enabled) {
     return [];
   }
-  const prompt = [
-    "You are a strict commit message linter. Respond with ONLY 'PASS' or 'FAIL: reason in Japanese'.",
-    "",
-    "Rules:",
-    "- Format: type(scope): description",
-    "- Description MUST clearly describe a specific change (what was changed and/or why)",
-    "- FAIL if the description is meaningless, nonsensical, placeholder-like, or does not describe an actual change",
-    "- FAIL examples: 'fix(repo): a', 'feat(repo): test', 'fix(repo): update', 'chore(repo): changes'",
-    "- PASS examples: 'fix(github): \u30C1\u30FC\u30E0\u306E\u89AA\u3092\u5BA3\u8A00\u306E\u9806\u306B\u4F5C\u308B', 'docs(docs): \u547D\u540D\u898F\u5247\u3092\u8FFD\u52A0\u3059\u308B'",
-    "",
-    `Message: ${message}`
-  ].join("\n");
+  const prompt = semanticLintPrompt(message);
   const runClaude = () => execFileSync("claude", ["-p", "--model", rules.model, prompt], {
     encoding: "utf8",
     timeout: 6e4,
