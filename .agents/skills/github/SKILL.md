@@ -55,7 +55,7 @@ git fetch --prune
 ## Issue
 
 - 既存 Issue があるか先に確認する。なければ実装前に作る。
-- タイトルと本文は `.github/conventions.yml` に従う。本文は署名の行から始め、見出しを背景、作業範囲、受け入れ条件の順に書く。必要なら最後に備考を足す。
+- タイトルと本文は、philtzjp/.github の `conventions.yml` に従う。リポジトリに `.github/conventions.yml` があれば、そちらに従う。本文は署名の行から始め、見出しを背景、作業範囲、受け入れ条件の順に書く。必要なら最後に備考を足す。
 - 背景は最初の行から箇条書きにする。影響範囲や検証方針は、作業範囲か備考に書く。
 - philtz-organizer-bot が Issue の書式を検査し、違反があれば内容をコメントにまとめるので、直す。
 - 受け入れ条件は task list（`- [ ]`）で書き、達成状況を追跡できるようにする。
@@ -182,7 +182,7 @@ gh pr create --body-file <file>
 ```
 
 - 本文を必ず明示する。`--fill` やエディタ生成で `Co-Authored-By` が混入し得る場合は使わない。
-- タイトルと本文は、philtzjp/pulumi の `.github/conventions.yml` に従う。リポジトリに同じ名前のファイルがあれば、そちらに従う。
+- タイトルと本文は、philtzjp/.github の `conventions.yml` に従う。リポジトリに `.github/conventions.yml` があれば、そちらに従う。
 - タイトルは `type(scope): 説明` にする。説明はそのまま main のコミットの件名になる。
 - 本文は署名の行から始め、見出しを背景、作業範囲、受け入れ条件、影響範囲・残リスクの順に書く。必要なら最後に備考を足す。
 - 対象 Issue を自然言語で参照する。本文の背景に `#<issue-number>` を書く。
