@@ -86,10 +86,14 @@ issue:
     sections: [背景, 作業範囲, 受け入れ条件]
     # 任意の欄。書くなら必須の欄のあとに置く
     optional_sections: [備考]
-    # この欄には - [ ] のタスクリストを 1 つ以上書く
+    # この欄は、すべての行を - [ ] のタスクリストで書く。字下げした行とコードブロックの中は問わない
     task_list_section: 受け入れ条件
-    # この欄は、最初の行から - の箇条書きで書く
-    list_sections: [背景]
+    # この欄は、すべての行を - の箇条書きで書く。字下げした行とコードブロックの中は問わない
+    list_sections: [背景, 作業範囲]
+    # 決めた欄のほかの見出しと、## のほかの深さの見出しと、同じ欄の 2 回目を書かない
+    forbid_unknown_sections: true
+    # 署名と最初の見出しの間に文を書かない
+    forbid_preamble: true
 
 pull_request:
     title_like_commit: true
@@ -100,5 +104,8 @@ pull_request:
     sections: [背景, 作業範囲, 受け入れ条件, 影響範囲・残リスク]
     optional_sections: [備考]
     task_list_section: 受け入れ条件
+    list_sections: [背景, 作業範囲, 影響範囲・残リスク]
+    forbid_unknown_sections: true
+    forbid_preamble: true
     # Closes #N などで Issue を自動で閉じない。日本語で書くため、Issue はマージ後に手で閉じる
     forbid_closing_keywords: true
