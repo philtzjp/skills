@@ -77,10 +77,11 @@ subject:
 issue:
     # タイトルはコミットメッセージと同じ形にする
     title_like_commit: true
-    # 先頭行の署名。✳︎ <会社名> <モデル名> <バージョン> の形にし、次の行は空ける
+    # 先頭行の署名。✳︎ <会社名> <モデル名> <バージョン> の形にし、次の行は空ける。
+    # bot が書くものは ✳︎ <bot の名前> にする。bot の名前は -bot で終わる
     signature:
         required: true
-        pattern: "^✳︎ \\S+ \\S.*$"
+        pattern: "^✳︎ (?:\\S+ \\S.*|[a-z0-9-]+-bot)$"
         example: ✳︎ Anthropic Claude Opus 5.5
     # 必須の欄。書く順もこの順にする
     sections: [背景, 作業範囲, 受け入れ条件]
@@ -99,7 +100,7 @@ pull_request:
     title_like_commit: true
     signature:
         required: true
-        pattern: "^✳︎ \\S+ \\S.*$"
+        pattern: "^✳︎ (?:\\S+ \\S.*|[a-z0-9-]+-bot)$"
         example: ✳︎ Anthropic Claude Opus 5.5
     sections: [背景, 作業範囲, 受け入れ条件, 影響範囲・残リスク]
     optional_sections: [備考]
