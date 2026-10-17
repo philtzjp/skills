@@ -7592,7 +7592,7 @@ var checkBody = (conventions2, rules, title, body) => {
     errors.push(...checkSubject(conventions2, title, false).map((error) => `\u30BF\u30A4\u30C8\u30EB: ${error}`));
   }
   const signature = splitSignature(rules.signature, body);
-  return [...errors, ...signature.errors, ...checkSections(body, rules), ...checkText(conventions2, body), ...checkFooters(conventions2, body)];
+  return [...errors, ...signature.errors, ...checkSections(stripFooters(conventions2, body).body, rules), ...checkText(conventions2, body), ...checkFooters(conventions2, body)];
 };
 var checkIssue = (conventions2, title, body) => checkBody(conventions2, conventions2.issue, title, body);
 var checkPullRequest = (conventions2, title, body) => {
