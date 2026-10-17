@@ -7504,34 +7504,84 @@ var splitSignature = (rules, body) => {
 };
 var splitSections = (body) => {
   const sections = /* @__PURE__ */ new Map();
+  const other_headings = [];
+  const duplicates = [];
+  let preamble = "";
   let current;
+  let in_fence = false;
   for (const line of stripComments(body).split(/\r?\n/)) {
-    const heading = line.match(/^##\s+(.+?)\s*$/);
-    if (heading?.[1] !== void 0) {
-      current = heading[1];
+    if (/^\s*```/.test(line)) {
+      in_fence = !in_fence;
+    }
+    const heading = in_fence ? null : line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
+    if (heading?.[1] === "##" && heading[2] !== void 0) {
+      current = heading[2];
+      if (sections.has(current)) {
+        duplicates.push(current);
+      }
       sections.set(current, "");
+    } else if (heading?.[2] !== void 0) {
+      other_headings.push(line.trim());
     } else if (current !== void 0) {
       sections.set(current, `${sections.get(current) ?? ""}${line}
 `);
+    } else {
+      preamble += `${line}
+`;
     }
   }
-  return sections;
+  return { sections, preamble, other_headings, duplicates };
+};
+var topLevelLinesNotMatching = (text, line_pattern) => {
+  const lines = [];
+  let in_fence = false;
+  for (const line of text.split("\n")) {
+    if (/^\s*```/.test(line)) {
+      in_fence = !in_fence;
+      continue;
+    }
+    if (in_fence || line.trim() === "" || /^\s/.test(line)) {
+      continue;
+    }
+    if (!line_pattern.test(line)) {
+      lines.push(line);
+    }
+  }
+  return lines;
 };
 var checkSections = (body, rules) => {
-  const sections = splitSections(body);
+  const { sections, preamble, other_headings, duplicates } = splitSections(body);
   const errors = rules.sections.filter((name) => (sections.get(name) ?? "").trim() === "").map((name) => `\u300C${name}\u300D\u306E\u6B04\u3092\u66F8\u304F`);
   const order = [...rules.sections, ...rules.optional_sections];
   const positions = [...sections.keys()].map((name) => order.indexOf(name)).filter((position) => position >= 0);
   if (positions.some((position, index) => index > 0 && position < (positions[index - 1] ?? 0))) {
     errors.push(`\u6B04\u306F ${order.join("\u3001")} \u306E\u9806\u306B\u66F8\u304F`);
   }
-  if (!/^\s*- \[[ xX]\] \S/m.test(sections.get(rules.task_list_section) ?? "")) {
-    errors.push(`\u300C${rules.task_list_section}\u300D\u306F - [ ] \u306E\u30BF\u30B9\u30AF\u30EA\u30B9\u30C8\u3067\u66F8\u304F`);
+  const task_list = sections.get(rules.task_list_section) ?? "";
+  if (!/^\s*- \[[ xX]\] \S/m.test(task_list) || topLevelLinesNotMatching(task_list, /^- \[[ xX]\] \S/).length > 0) {
+    errors.push(`\u300C${rules.task_list_section}\u300D\u306F\u3001\u3059\u3079\u3066\u306E\u884C\u3092 - [ ] \u306E\u30BF\u30B9\u30AF\u30EA\u30B9\u30C8\u3067\u66F8\u304F`);
   }
   for (const name of rules.list_sections ?? []) {
-    const first_line = (sections.get(name) ?? "").split("\n").find((line) => line.trim() !== "");
-    if (first_line !== void 0 && !/^- \S/.test(first_line)) {
-      errors.push(`\u300C${name}\u300D\u306F\u6700\u521D\u306E\u884C\u304B\u3089 - \u306E\u7B87\u6761\u66F8\u304D\u3067\u66F8\u304F`);
+    if (topLevelLinesNotMatching(sections.get(name) ?? "", /^- \S/).length > 0) {
+      errors.push(`\u300C${name}\u300D\u306F\u3001\u3059\u3079\u3066\u306E\u884C\u3092 - \u306E\u7B87\u6761\u66F8\u304D\u3067\u66F8\u304F`);
+    }
+  }
+  if (rules.forbid_unknown_sections) {
+    const unknown = [...sections.keys()].filter((name) => !order.includes(name));
+    if (unknown.length > 0) {
+      errors.push(`\u6C7A\u307E\u3063\u3066\u3044\u306A\u3044\u6B04\u3092\u66F8\u304B\u306A\u3044: ${unknown.join("\u3001")}\u3002\u6B04\u306F ${order.join("\u3001")} \u3060\u3051\u306B\u3059\u308B`);
+    }
+    if (other_headings.length > 0) {
+      errors.push(`\u898B\u51FA\u3057\u306F ## \u3060\u3051\u3092\u4F7F\u3046: ${other_headings.join("\u3001")}`);
+    }
+    if (duplicates.length > 0) {
+      errors.push(`\u540C\u3058\u6B04\u3092 2 \u56DE\u66F8\u304B\u306A\u3044: ${[...new Set(duplicates)].join("\u3001")}`);
+    }
+  }
+  if (rules.forbid_preamble) {
+    const signature = new RegExp(rules.signature.pattern, "u");
+    if (preamble.split("\n").some((line) => line.trim() !== "" && !signature.test(line))) {
+      errors.push("\u7F72\u540D\u3068\u6700\u521D\u306E\u898B\u51FA\u3057\u306E\u9593\u306B\u6587\u3092\u66F8\u304B\u306A\u3044");
     }
   }
   return errors;
