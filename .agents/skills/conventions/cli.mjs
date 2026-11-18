@@ -7557,9 +7557,11 @@ var checkSections = (body, rules) => {
   if (positions.some((position, index) => index > 0 && position < (positions[index - 1] ?? 0))) {
     errors.push(`\u6B04\u306F ${order.join("\u3001")} \u306E\u9806\u306B\u66F8\u304F`);
   }
-  const task_list = sections.get(rules.task_list_section) ?? "";
-  if (!/^\s*- \[[ xX]\] \S/m.test(task_list) || topLevelLinesNotMatching(task_list, /^- \[[ xX]\] \S/).length > 0) {
-    errors.push(`\u300C${rules.task_list_section}\u300D\u306F\u3001\u3059\u3079\u3066\u306E\u884C\u3092 - [ ] \u306E\u30BF\u30B9\u30AF\u30EA\u30B9\u30C8\u3067\u66F8\u304F`);
+  if (rules.task_list_section !== void 0) {
+    const task_list = sections.get(rules.task_list_section) ?? "";
+    if (!/^\s*- \[[ xX]\] \S/m.test(task_list) || topLevelLinesNotMatching(task_list, /^- \[[ xX]\] \S/).length > 0) {
+      errors.push(`\u300C${rules.task_list_section}\u300D\u306F\u3001\u3059\u3079\u3066\u306E\u884C\u3092 - [ ] \u306E\u30BF\u30B9\u30AF\u30EA\u30B9\u30C8\u3067\u66F8\u304F`);
+    }
   }
   for (const name of rules.list_sections ?? []) {
     if (topLevelLinesNotMatching(sections.get(name) ?? "", /^- \S/).length > 0) {
