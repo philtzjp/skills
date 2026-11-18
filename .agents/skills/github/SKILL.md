@@ -46,7 +46,7 @@ git status --short --branch
 git fetch --prune
 ```
 
-- git hook を有効にする。リポジトリに `.vite-hooks/` があれば `git config core.hooksPath .vite-hooks` を、`lefthook.yaml` しかなければ `lefthook install` を実行する。どちらも clone ごとの設定なので、新しい作業環境では毎回実行する。
+- git hook を有効にする。リポジトリに `.vite-hooks/` があれば `vp install` を、`lefthook.yaml` しかなければ `lefthook install` を実行する。どちらも clone ごとの設定なので、新しい作業環境では毎回実行する。
 - デフォルトブランチ、現在ブランチ、リモート追跡ブランチの状態を確認する。
 - 未コミット変更があれば、内容と所有者を確認する。今回の作業に無関係な変更をステージ、コミット、修正しない。
 - 現在ブランチがデフォルトブランチでなければ、今回の作業用か確認する。
@@ -110,6 +110,11 @@ OK: feat(repo): / feat(.agents): / feat(.claude): / feat(dashboard): / feat(log)
 - 動作を伴わない名詞で終えない。`feat(api): ユーザー認証` ではなく `feat(api): ユーザー認証を追加`。
 - emoji を含めない。
 - 論理的なスコープ（パッケージ、機能）ごとにコミットを分割する。無関係な変更を1つのコミットに混ぜない。
+
+本文の書き方。
+
+- 本文には、コメントの代わりに、そのコードがそうなっていなければならない理由を書く。採用した理由は書かない。
+- そうしなければならない理由がなければ、本文を書かない。リファクタリングのように動作が同じで、好きに変えてよい変更がこれにあたる。
 
 ## コミットの実行
 
@@ -184,7 +189,7 @@ gh pr create --body-file <file>
 - 本文を必ず明示する。`--fill` やエディタ生成で `Co-Authored-By` が混入し得る場合は使わない。
 - タイトルと本文は、philtzjp/.github の `conventions.yml` に従う。リポジトリに `.github/conventions.yml` があれば、そちらに従う。
 - タイトルは `type(scope): 説明` にする。説明はそのまま main のコミットの件名になる。
-- 本文は署名の行から始め、見出しを背景、作業範囲、受け入れ条件、影響範囲・残リスクの順に書く。必要なら最後に備考を足す。
+- 本文は署名の行から始め、見出しを背景、作業範囲の順に書く。必要なら最後に関連 Issue を足す。
 - 対象 Issue を自然言語で参照する。本文の背景に `#<issue-number>` を書く。
 - `Closes #N` などの自動クローズのキーワードを使わない。Issue はマージ後に手で閉じる。
 - philtz-organizer-bot が PR を開いたとき、編集したとき、push したときに書式を検査し、`organizer-bot/conventions` のステータスを付ける。違反があれば内容をコメントにまとめるので、直す。
