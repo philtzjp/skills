@@ -136,7 +136,7 @@ git commit --author="Cursor Agent <cursoragent@cursor.com>" -m "<message>"
 
 - commit-msg hook が未承認の `Co-authored-by:` を自動付与する環境では、それを除去する hook を入れて対処する。`git commit --no-verify` で hook を迂回しない。
 - 履歴修正で force push が必要なら、guard の許可を一時的に有効にして push し、作業後に戻す。
-- PR の途中のコミットは squash でまとめられ、本文を書いたコミットだけが件名と本文ごと main のコミットの本文に移る。本文のないコミットの件名を直すためだけに、履歴を書き換えて force push しない。移る本文が規約に合わず bot がマージを断ったときは、履歴を書き換えて直す。
+- PR の途中のコミットは squash されて main に残らない。途中のコミットのメッセージを直すためだけに、履歴を書き換えて force push しない。
 
 ## author と committer
 
