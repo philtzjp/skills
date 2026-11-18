@@ -111,6 +111,20 @@ OK: feat(repo): / feat(.agents): / feat(.claude): / feat(dashboard): / feat(log)
 - emoji を含めない。
 - 論理的なスコープ（パッケージ、機能）ごとにコミットを分割する。無関係な変更を1つのコミットに混ぜない。
 
+本文の書き方。
+
+- 本文には、コードのコメントの代わりに、そのコードがなぜそうなっていなければならないかを書く。採用した書き方や依存、設定の理由、避けた選択肢と避けた理由、外部の制約がこれにあたる。
+- 何を変えたかは件名と差分でわかるので、本文で繰り返さない。理由がなければ本文を書かない。
+- 件名と本文の間は 1 行空ける。
+- 本文は philtz-organizer-bot が squash のコミットに移し、main に残る。`git blame` でその行を変えたコミットを開いた人が、理由をそこで読めるように書く。
+- 本文にも件名と同じ禁止語の規約がかかる。リポジトリの `.github/conventions.yml` が `single_line: true` なら本文を書かない。
+
+```
+feat(api): 外部 API の呼び出しを再試行する
+
+上流の API は 1 秒以内の連続呼び出しを 429 で落とし、Retry-After が最短 2 秒のため、待ち時間を 2 秒から倍にしていく。
+```
+
 ## コミットの実行
 
 - ファイルごとに `git diff` を実行し、各変更の作者を確認する。
@@ -130,7 +144,7 @@ git commit --author="Cursor Agent <cursoragent@cursor.com>" -m "<message>"
 
 - commit-msg hook が未承認の `Co-authored-by:` を自動付与する環境では、それを除去する hook を入れて対処する。`git commit --no-verify` で hook を迂回しない。
 - 履歴修正で force push が必要なら、guard の許可を一時的に有効にして push し、作業後に戻す。
-- PR の途中のコミットは squash されて main に残らない。途中のコミットのメッセージを直すためだけに、履歴を書き換えて force push しない。
+- PR の途中のコミットは squash でまとめられ、本文を書いたコミットだけが件名と本文ごと main のコミットの本文に移る。本文のないコミットの件名を直すためだけに、履歴を書き換えて force push しない。移る本文が規約に合わず bot がマージを断ったときは、履歴を書き換えて直す。
 
 ## author と committer
 
@@ -225,10 +239,11 @@ philtz-organizer-bot は、次をすべて満たすときだけ squash でマー
 
 - PR が開いていて、Draft でない。
 - タイトルと本文が規約に合っている。
+- PR の中のコミットの本文から作る main のコミットメッセージが規約に合っている。
 - ブランチがデフォルトブランチに追いついている。
 - 必須の検査が通り、ruleset が求める承認がある。ラベルを付けたのが org の owner なら、承認は確かめない。
 
-main に残るのは 1 PR につき 1 つのコミットで、件名は `merge(scope): 説明` になる。説明は PR のタイトルから取り、scope は変更したファイルから bot が決める。本文は付かない。author は PR を出した人、committer は philtz-organizer-bot で、`(#N)` と `Co-authored-by` は付かない。
+main に残るのは 1 PR につき 1 つのコミットで、件名は `merge(scope): 説明` になる。説明は PR のタイトルから取り、scope は変更したファイルから bot が決める。本文は、PR の中で本文を書いたコミットの件名と本文の組を並べたものになる。本文のないコミット、ベースブランチを取り込んだマージコミット、ツールのフッター、`Co-authored-by` は入らない。author は PR を出した人、committer は philtz-organizer-bot で、`(#N)` と `Co-authored-by` は付かない。
 
 - `gh pr merge` を使わない。
 - merge プレフィクスでマージであることは明示されるので、PR のタイトルの説明に「マージ」と書かない。`feat(api): foo をマージ` ではなく `feat(api): foo を追加`。
