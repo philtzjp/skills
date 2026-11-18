@@ -47,7 +47,6 @@ git fetch --prune
 ```
 
 - git hook を有効にする。リポジトリに `.vite-hooks/` があれば `vp install` を実行する。`package.json` の `prepare` が `vp config` を呼び、`core.hooksPath` を設定する。`lefthook.yaml` しかなければ `lefthook install` を実行する。どちらも clone ごとの設定なので、新しい作業環境では毎回実行する。
-- `core.hooksPath` を手で設定しない。`vp config` を通さないと、hook から `vp` が見つからないことがある。
 - デフォルトブランチ、現在ブランチ、リモート追跡ブランチの状態を確認する。
 - 未コミット変更があれば、内容と所有者を確認する。今回の作業に無関係な変更をステージ、コミット、修正しない。
 - 現在ブランチがデフォルトブランチでなければ、今回の作業用か確認する。
