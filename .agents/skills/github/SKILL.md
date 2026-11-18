@@ -233,7 +233,7 @@ philtz-organizer-bot は、次をすべて満たすときだけ squash でマー
 - ブランチがデフォルトブランチに追いついている。
 - 必須の検査が通り、ruleset が求める承認がある。ラベルを付けたのが org の owner なら、承認は確かめない。
 
-main に残るのは 1 PR につき 1 つのコミットで、件名は `merge(scope): 説明` になる。説明は PR のタイトルから取り、scope は変更したファイルから bot が決める。本文は、PR の中のコミットの本文を並べたものになる。author は PR を出した人、committer は philtz-organizer-bot で、`(#N)` と `Co-authored-by` は付かない。
+main に残るのは 1 PR につき 1 つのコミットで、件名は `merge(scope): 説明` になる。説明は PR のタイトルから取り、scope は変更したファイルから bot が決める。本文は付かない。author は PR を出した人、committer は philtz-organizer-bot で、`(#N)` と `Co-authored-by` は付かない。
 
 - `gh pr merge` を使わない。
 - merge プレフィクスでマージであることは明示されるので、PR のタイトルの説明に「マージ」と書かない。`feat(api): foo をマージ` ではなく `feat(api): foo を追加`。
