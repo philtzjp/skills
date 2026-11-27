@@ -25,7 +25,8 @@
 | `hono` | Hono による HTTP API（OpenAPI スキーマ、エラー形式、ルーティング、認証方式、ヘルスチェック等）の設計・実装・変更時 |
 | `errorpage` | エラー応答（404 / 410 / 301 の使い分け、soft 404 の回避、HTML / Markdown / problem+json の出し分け、エラーページ）の設計・実装時 |
 | `analytics` | アクセス解析（Google Analytics と Consent Mode、Cookie バナー、Cloudflare Web Analytics 等）の実装・変更時 |
-| `e2etest` | ユーザー向け主要フロー / UI 変更 / フロー成功条件変更後の E2E テスト作成・実行時 |
+| `e2etest` | ユーザー向け主要フロー / UI 変更 / フロー成功条件変更後の E2E テスト作成・実行時。e2e を使う Philtz の方針。`e2e` と一緒に入れる |
+| `e2e` | e2e（https://e2e.com/）でテストを書く・実行する・直す時の API と CLI。npm の e2e パッケージに同梱されたスキルを `scripts/sync-e2e-skill.sh <版>` で写すので、直接編集しない。写した版は `VERSION` にある |
 | `data-migration` | `db` に統合済み。`db` への案内のみ |
 | `api-design` | `hono` に統合済み。`hono` への案内のみ |
 | `typescript-monorepo` | `turborepo` に統合済み。`turborepo` への案内のみ |
