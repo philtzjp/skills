@@ -1,6 +1,6 @@
 ---
 name: e2etest
-description: E2E テストを作成・実行する。e2e（https://e2e.com/）で書き、API と CLI は e2e スキルに従う。テストを書く条件と書かない条件、e2e init のフラグ、agent.act と locator の使い分け、リプレイキャッシュのコミット、秘密情報、sleep の禁止と明示的な待機条件。ユーザー向け主要フローの追加、重要な UI 変更、既存フローの成功条件を変えたときに使う。
+description: Web と iOS・Android の E2E テストを作成・実行する。e2e（https://e2e.com/）で書き、API と CLI は e2e スキルに従う。テストを書く条件と書かない条件、e2e init のフラグ、手元のサブスクと CI の鍵、agent.act と locator の使い分け、CI で実行するテストの絞り込み、リプレイキャッシュのコミット、秘密情報、sleep の禁止と明示的な待機条件。ユーザー向け主要フローの追加、重要な UI 変更、既存フローの成功条件を変えたときに使う。
 ---
 
 # e2etest
@@ -46,13 +46,23 @@ e2e のないリポジトリに入れるのは、ユーザーの許可を得て�
 DISABLE_TELEMETRY=1 vp dlx e2e init --yes --skills none --mcp none --gateway <gateway> --install
 ```
 
-- `--gateway` は、モデルの費用を誰が払うかをユーザーに確かめてから決める。agent.act を使わないなら `none`。
+- `--gateway` は、モデルの項に従って決める。agent.act を使わないなら `none`。
 - CI で動かすなら `--ci github-actions` を足す。生成された workflow の鍵の名前と、アプリの URL を確かめる。
 - CLAUDE.md や `.mcp.json`、`.cursor/mcp.json`、`.codex/config.toml` ができていたら消す。
 - `.gitignore` に足された `.e2e/cache/` の行を消す。理由はリプレイキャッシュの項にある。
 - 生成された `e2e.config.ts` と `tests/` にはコメントが入っている。コメントを禁じる lint があるリポジトリでは消す。
 - `tsconfig.json` の `include` が `tests/` を含まなければ足す。
 - `vp run verify` のような検査を通す。fallow が `tests/` や e2e の依存を未使用と判定したら、`.fallowrc.jsonc` の `entryPoints` に足す。無視の指示で黙らせない。
+
+## モデル
+
+- 手元では、各自の AI のサブスクで動かしてよい。`pnpm exec e2e login openai`（ChatGPT）、`pnpm exec e2e login github-copilot`、Claude Code のログイン（`@e2e-dev/acp`）などがある。Claude Max と Team は、プランの API クレジットの鍵を使う。
+- CI では API の鍵を使う。個人のサブスクのログインを CI に持ち込まない。鍵の費用を誰が払うかは、ユーザーに確かめてから決める。
+- 使えるモデルの一覧は `pnpm exec e2e models` で確かめる。
+
+## モバイル
+
+iOS と Android のアプリも、同じ規約で e2e で書く。エンジンは `@e2e-dev/mobile`。シミュレータ、エミュレータ、端末の準備は e2e スキルの `setup` を読み、`pnpm exec e2e doctor` で確かめる。
 
 ## agent.act と locator の使い分け
 
@@ -70,6 +80,16 @@ DISABLE_TELEMETRY=1 vp dlx e2e init --yes --skills none --mcp none --gateway <ga
 - CI では `--strict-cache` を付けて実行する。記録が古ければ、モデルを呼ばずに失敗する。手元で記録し直してコミットする。
 - `agent.assert`、`agent.waitFor`、`agent.extract` は記録されず、CI でもモデルを呼ぶ。CI に鍵が要るかは、これらを使うかで決まる。
 - 記録には、`Secret` で渡したもの以外の入力値がそのまま残る。PR で `.e2e/cache/` の差分も読み、個人情報や本番のデータが入っていないか確かめる。
+
+## CI で実行するテストを絞る
+
+PR では、変更の影響を受けないテストを飛ばしてよい。`@e2e-dev/decision` の `decisionFilter()` を `filters` に置き、`--changed-since` を付けて実行する。
+
+- `--changed-since origin/<ベースブランチ>` を付けるのは PR だけにする。main では全部実行する。
+- checkout は `fetch-depth: 0` にする。`pull_request_target` では使わない。
+- decision model の鍵が CI に要る。鍵がなかったりフィルターが失敗したりすると、全部実行される。
+- 何が飛ぶかは `pnpm exec e2e list --changed-since origin/main` で確かめる。これもモデルを呼ぶ。
+- テストの数が少ないうちは入れない。鍵と費用が増えるだけになる。
 
 ## 秘密情報
 
@@ -96,4 +116,4 @@ DISABLE_TELEMETRY=1 vp dlx e2e init --yes --skills none --mcp none --gateway <ga
 - `.e2e/cache/` の差分をコミットしたか。差分に個人情報や本番のデータがないか。
 - 秘密情報がテストコードにないか。
 - `sleep` が残っていないか。待機が明示的な条件になっているか。
-- テストが CI で通るか。ローカルでしか通らない前提を持ち込んでいないか。
+- テストが CI で通るか。ローカルでしか通らない前提や、個人のサブスクのログインを持ち込んでいないか。
